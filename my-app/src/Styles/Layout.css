@@ -1,0 +1,34 @@
+a:-webkit-any-link {
+    color: inherit;
+    cursor: pointer;
+    text-decoration: inherit;
+} 
+
+a:hover {
+    text-decoration: underline;
+}
+
+.Toolbar {
+    padding-top: 2vh;
+    padding-bottom: 1vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: auto;
+    justify-content: space-around;
+    width: 90vw;
+    height: 5vh;
+}
+
+.LayoutButton {
+    width: 25%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgb(146, 110, 212);
+    border-radius: 15px;
+    background-color: rgba(146, 110, 212, 0.6);
+}
+
