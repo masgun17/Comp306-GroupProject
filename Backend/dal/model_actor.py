@@ -151,30 +151,6 @@ class Actor():
         else:
             print(len(Age))
             return result_code, None
-    """
-## Input will be: Id and (UserTypeId, Name, Surname, Email, Phone, Password, KvkkCheck)
-    @classmethod
-    def change_password(cls, Actor_id, newPassword):
-        conn = connection.cursor()
-        result_code = False
-        if Actor_id is not None and newPassword is not None:
-            try:
-                conn.execute(f'''
-                            update Actor set
-                               Password = '{newPassword}'
-                            where Id = {Actor_id}
-                            ''')
-                result_code = True
-                conn.commit()
-            except Exception as e:
-                print(e)
-            finally:
-                conn.close()
-                return result_code
-        else:
-            print(len(Actor_id))
-            return result_code, None
-    """
 
     @classmethod
     def get_all_by_id(cls, Actor_id):

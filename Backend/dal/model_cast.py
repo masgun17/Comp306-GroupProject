@@ -6,9 +6,9 @@ from sqlalchemy.dialects.mysql import pymysql
 
 from app_globals import connection
 
-class Directs():
-    __tablename__ = 'Directs'
-    # Directs (Sid + Pid)
+class Cast():
+    __tablename__ = 'Cast'
+    # Cast (Sid + Pid)
     Sid = Column(BigInteger, primary_key=True, autoincrement=True)
     Pid = Column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -18,7 +18,7 @@ class Directs():
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()[0]
+            query_item = conn.execute(f"select * from Cast where Sid = {Sid} and Pid={Pid}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -35,7 +35,7 @@ class Directs():
         result_code = False
         try:
             if column_value is not None and column_name is not None and len(column_name) > 0:
-                items = conn.execute(f"select * from Directs where {column_name} = '{column_value}'").fetchall()
+                items = conn.execute(f"select * from Cast where {column_name} = '{column_value}'").fetchall()
                 if items is not None and len(items) > 0:
                     result_code = True
                     if first_n is not None:
@@ -55,7 +55,7 @@ class Directs():
         try:
             if column_values is not None and column_names is not None \
                     and len(column_names) > 0 and len(column_names)==len(column_values):
-                query = "select * from Directs where " + column_names[0] + " = '" + column_values[0] + "' "
+                query = "select * from Cast where " + column_names[0] + " = '" + column_values[0] + "' "
                 for i in range(len(column_names)-1):
                     query = query + " and " + column_names[i] + " = '" + column_values[i] + "' "
                 items = conn.execute(query).fetchall()
@@ -76,7 +76,7 @@ class Directs():
         items = None
         result_code = False
         try:
-            items = conn.execute("select * from Directs").fetchall()
+            items = conn.execute("select * from Cast").fetchall()
             if items is not None and len(items) > 0:
                 result_code = True
         except Exception as e:
@@ -88,18 +88,18 @@ class Directs():
 
     ## Input will be: (Sid + Pid)
     @classmethod
-    def add_item(cls, Directs_item):
+    def add_item(cls, Cast_item):
         conn = connection.cursor()
         result_code = False
-        if Directs_item is not None and len(Directs_item)==2:
+        if Cast_item is not None and len(Cast_item)==2:
             try:
                 conn.execute(f"""
-                    insert into Directs
+                    insert into Cast
                        ([Sid]
                        ,[Pid])
                     values
-                       ({Directs_item[0]}
-                       ,{Directs_item[1]})""")
+                       ({Cast_item[0]}
+                       ,{Cast_item[1]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:
@@ -108,7 +108,7 @@ class Directs():
                 conn.close()
                 return result_code
         else:
-            print(len(Directs_item))
+            print(len(Cast_item))
             return result_code, None
 
 
@@ -118,7 +118,7 @@ class Directs():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Directs where Sid = {Sid} and Pid={Pid}")
+            conn.execute(f"delete from Cast where Sid = {Sid} and Pid={Pid}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -137,7 +137,7 @@ class Directs():
         if Sid is not None and Pid is not None:
             try:
                 conn.execute(f"""
-                            update Directs set
+                            update Cast set
                                Sid = {Sid}
                                Pid = {Pid}
                             where Sid = {Sid} and Pid={Pid}
@@ -159,7 +159,7 @@ class Directs():
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()
+            items = conn.execute(f"select * from Cast where Sid = {Sid} and Pid={Pid}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:

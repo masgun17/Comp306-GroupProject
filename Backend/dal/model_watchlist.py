@@ -6,19 +6,19 @@ from sqlalchemy.dialects.mysql import pymysql
 
 from app_globals import connection
 
-class Directs():
-    __tablename__ = 'Directs'
-    # Directs (Sid + Pid)
+class WatchList():
+    __tablename__ = 'WatchList'
+    # WatchList (Uid, Sid)
+    Uid = Column(BigInteger, primary_key=True, autoincrement=True)
     Sid = Column(BigInteger, primary_key=True, autoincrement=True)
-    Pid = Column(BigInteger, primary_key=True, autoincrement=True)
 
     @classmethod
-    def has_item(cls, Sid, Pid):
+    def has_item(cls, Sid, Uid):
         conn = connection.cursor()
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()[0]
+            query_item = conn.execute(f"select * from WatchList where Sid = {Sid} and Uid={Uid}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -35,7 +35,7 @@ class Directs():
         result_code = False
         try:
             if column_value is not None and column_name is not None and len(column_name) > 0:
-                items = conn.execute(f"select * from Directs where {column_name} = '{column_value}'").fetchall()
+                items = conn.execute(f"select * from WatchList where {column_name} = '{column_value}'").fetchall()
                 if items is not None and len(items) > 0:
                     result_code = True
                     if first_n is not None:
@@ -55,7 +55,7 @@ class Directs():
         try:
             if column_values is not None and column_names is not None \
                     and len(column_names) > 0 and len(column_names)==len(column_values):
-                query = "select * from Directs where " + column_names[0] + " = '" + column_values[0] + "' "
+                query = "select * from WatchList where " + column_names[0] + " = '" + column_values[0] + "' "
                 for i in range(len(column_names)-1):
                     query = query + " and " + column_names[i] + " = '" + column_values[i] + "' "
                 items = conn.execute(query).fetchall()
@@ -76,7 +76,7 @@ class Directs():
         items = None
         result_code = False
         try:
-            items = conn.execute("select * from Directs").fetchall()
+            items = conn.execute("select * from WatchList").fetchall()
             if items is not None and len(items) > 0:
                 result_code = True
         except Exception as e:
@@ -86,20 +86,20 @@ class Directs():
             return result_code, items
 
 
-    ## Input will be: (Sid + Pid)
+    ## Input will be: (Uid + Sid)
     @classmethod
-    def add_item(cls, Directs_item):
+    def add_item(cls, WatchList_item):
         conn = connection.cursor()
         result_code = False
-        if Directs_item is not None and len(Directs_item)==2:
+        if WatchList_item is not None and len(WatchList_item)==2:
             try:
                 conn.execute(f"""
-                    insert into Directs
-                       ([Sid]
-                       ,[Pid])
+                    insert into WatchList
+                       ([Uid],
+                       [Sid])
                     values
-                       ({Directs_item[0]}
-                       ,{Directs_item[1]})""")
+                       ({WatchList_item[0]}
+                       ,{WatchList_item[1]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:
@@ -108,17 +108,17 @@ class Directs():
                 conn.close()
                 return result_code
         else:
-            print(len(Directs_item))
+            print(len(WatchList_item))
             return result_code, None
 
 
-    # deletes given item (Sid + Pid) from db
+    # deletes given item (Sid + Uid) from db
     @classmethod
-    def delete_item(cls, Sid, Pid):
+    def delete_item(cls, Sid, Uid):
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Directs where Sid = {Sid} and Pid={Pid}")
+            conn.execute(f"delete from WatchList where Sid = {Sid} and Uid={Uid}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -129,18 +129,18 @@ class Directs():
 
 
 
-    ## Input will be: Sid, Pid
+    ## Input will be: Sid, Uid
     @classmethod
-    def update_item(cls, Sid, Pid):
+    def update_item(cls, Sid, Uid):
         conn = connection.cursor()
         result_code = False
-        if Sid is not None and Pid is not None:
+        if Sid is not None and Uid is not None:
             try:
                 conn.execute(f"""
-                            update Directs set
+                            update WatchList set
                                Sid = {Sid}
-                               Pid = {Pid}
-                            where Sid = {Sid} and Pid={Pid}
+                               Uid = {Uid}
+                            where Sid = {Sid} and Uid={Uid}
                             """)
                 result_code = True
                 conn.commit()
@@ -150,16 +150,16 @@ class Directs():
                 conn.close()
                 return result_code
         else:
-            print(Pid, Sid)
+            print(Uid, Sid)
             return result_code, None
 
     @classmethod
-    def get_all_by_id(cls, Sid, Pid):
+    def get_all_by_id(cls, Sid, Uid):
         conn = connection.cursor()
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()
+            items = conn.execute(f"select * from WatchList where Sid = {Sid} and Uid={Uid}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:
