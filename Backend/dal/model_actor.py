@@ -18,7 +18,7 @@ class Actor():
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Actor where Id = {Actor_id}").fetchall()[0]
+            query_item = conn.execute(f"select * from Actor where Pid = {Actor_id}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -118,7 +118,7 @@ class Actor():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Actor where Id={item_id}")
+            conn.execute(f"delete from Actor where Pid={item_id}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -139,7 +139,7 @@ class Actor():
                 conn.execute(f"""
                             update Actor set
                                Age = {Age}
-                            where Id = {Actor_id}
+                            where Pid = {Actor_id}
                             """)
                 result_code = True
                 conn.commit()
@@ -182,7 +182,7 @@ class Actor():
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Actor where Id={Actor_id}").fetchall()
+            items = conn.execute(f"select * from Actor where Pid={Actor_id}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:

@@ -6,19 +6,19 @@ from sqlalchemy.dialects.mysql import pymysql
 
 from app_globals import connection
 
-class Director():
-    __tablename__ = 'Director'
-    # Director (Pid + AwardCount)
+class Directs():
+    __tablename__ = 'Directs'
+    # Directs (Sid + Pid)
     Pid = Column(BigInteger, primary_key=True, autoincrement=True)
-    AwardCount = Column(Integer)
+    Age = Column(Integer)
 
     @classmethod
-    def has_item(cls, Director_id):
+    def has_item(cls, Directs_id):
         conn = connection.cursor()
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Director where Pid = {Director_id}").fetchall()[0]
+            query_item = conn.execute(f"select * from Directs where Id = {Directs_id}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -35,7 +35,7 @@ class Director():
         result_code = False
         try:
             if column_value is not None and column_name is not None and len(column_name) > 0:
-                items = conn.execute(f"select * from Director where {column_name} = '{column_value}'").fetchall()
+                items = conn.execute(f"select * from Directs where {column_name} = '{column_value}'").fetchall()
                 if items is not None and len(items) > 0:
                     result_code = True
                     if first_n is not None:
@@ -55,7 +55,7 @@ class Director():
         try:
             if column_values is not None and column_names is not None \
                     and len(column_names) > 0 and len(column_names)==len(column_values):
-                query = "select * from Director where " + column_names[0] + " = '" + column_values[0] + "' "
+                query = "select * from Directs where " + column_names[0] + " = '" + column_values[0] + "' "
                 for i in range(len(column_names)-1):
                     query = query + " and " + column_names[i] + " = '" + column_values[i] + "' "
                 items = conn.execute(query).fetchall()
@@ -76,7 +76,7 @@ class Director():
         items = None
         result_code = False
         try:
-            items = conn.execute("select * from Director").fetchall()
+            items = conn.execute("select * from Directs").fetchall()
             if items is not None and len(items) > 0:
                 result_code = True
         except Exception as e:
@@ -86,20 +86,20 @@ class Director():
             return result_code, items
 
 
-    ## Input will be: (Pid + AwardCount)
+    ## Input will be: (Sid + Pid)
     @classmethod
-    def add_item(cls, Director_item):
+    def add_item(cls, Directs_item):
         conn = connection.cursor()
         result_code = False
-        if Director_item is not None and len(Director_item)==2:
+        if Directs_item is not None and len(Directs_item)==2:
             try:
                 conn.execute(f"""
-                    insert into Director
+                    insert into Directs
                        ([Pid]
-                       ,[AwardCount])
+                       ,[Age])
                     values
-                       ({Director_item[0]}
-                       ,{Director_item[1]})""")
+                       ({Directs_item[0]}
+                       ,{Directs_item[1]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:
@@ -108,7 +108,7 @@ class Director():
                 conn.close()
                 return result_code
         else:
-            print(len(Director_item))
+            print(len(Directs_item))
             return result_code, None
 
 
@@ -118,7 +118,7 @@ class Director():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Director where Pid={item_id}")
+            conn.execute(f"delete from Directs where Id={item_id}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -129,17 +129,17 @@ class Director():
 
 
 
-    ## Input will be: Pid + AwardCount
+    ## Input will be: Pid + Age
     @classmethod
-    def update_item(cls, Director_id, AwardCount):
+    def update_item(cls, Directs_id, Age):
         conn = connection.cursor()
         result_code = False
-        if Director_id is not None and AwardCount is not None:
+        if Directs_id is not None and Age is not None:
             try:
                 conn.execute(f"""
-                            update Director set
-                               AwardCount = {AwardCount}
-                            where Pid = {Director_id}
+                            update Directs set
+                               Age = {Age}
+                            where Id = {Directs_id}
                             """)
                 result_code = True
                 conn.commit()
@@ -149,20 +149,20 @@ class Director():
                 conn.close()
                 return result_code
         else:
-            print(len(AwardCount))
+            print(len(Age))
             return result_code, None
     """
 ## Input will be: Id and (UserTypeId, Name, Surname, Email, Phone, Password, KvkkCheck)
     @classmethod
-    def change_password(cls, Director_id, newPassword):
+    def change_password(cls, Directs_id, newPassword):
         conn = connection.cursor()
         result_code = False
-        if Director_id is not None and newPassword is not None:
+        if Directs_id is not None and newPassword is not None:
             try:
                 conn.execute(f'''
-                            update Director set
+                            update Directs set
                                Password = '{newPassword}'
-                            where Id = {Director_id}
+                            where Id = {Directs_id}
                             ''')
                 result_code = True
                 conn.commit()
@@ -172,17 +172,17 @@ class Director():
                 conn.close()
                 return result_code
         else:
-            print(len(Director_id))
+            print(len(Directs_id))
             return result_code, None
     """
 
     @classmethod
-    def get_all_by_id(cls, Director_id):
+    def get_all_by_id(cls, Directs_id):
         conn = connection.cursor()
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Director where Pid={Director_id}").fetchall()
+            items = conn.execute(f"select * from Directs where Id={Directs_id}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:
