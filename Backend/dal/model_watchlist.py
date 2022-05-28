@@ -6,9 +6,9 @@ from sqlalchemy.dialects.mysql import pymysql
 
 from app_globals import connection
 
-class WatchList():
-    __tablename__ = 'WatchList'
-    # WatchList (Uid, Sid)
+class Watchlist():
+    __tablename__ = 'Watchlist'
+    # Watchlist (Uid, Sid)
     Uid = Column(BigInteger, primary_key=True, autoincrement=True)
     Sid = Column(BigInteger, primary_key=True, autoincrement=True)
 
@@ -18,7 +18,7 @@ class WatchList():
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from WatchList where Sid = {Sid} and Uid={Uid}").fetchall()[0]
+            query_item = conn.execute(f"select * from Watchlist where Sid = {Sid} and Uid={Uid}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -35,7 +35,7 @@ class WatchList():
         result_code = False
         try:
             if column_value is not None and column_name is not None and len(column_name) > 0:
-                items = conn.execute(f"select * from WatchList where {column_name} = '{column_value}'").fetchall()
+                items = conn.execute(f"select * from Watchlist where {column_name} = '{column_value}'").fetchall()
                 if items is not None and len(items) > 0:
                     result_code = True
                     if first_n is not None:
@@ -55,7 +55,7 @@ class WatchList():
         try:
             if column_values is not None and column_names is not None \
                     and len(column_names) > 0 and len(column_names)==len(column_values):
-                query = "select * from WatchList where " + column_names[0] + " = '" + column_values[0] + "' "
+                query = "select * from Watchlist where " + column_names[0] + " = '" + column_values[0] + "' "
                 for i in range(len(column_names)-1):
                     query = query + " and " + column_names[i] + " = '" + column_values[i] + "' "
                 items = conn.execute(query).fetchall()
@@ -76,7 +76,7 @@ class WatchList():
         items = None
         result_code = False
         try:
-            items = conn.execute("select * from WatchList").fetchall()
+            items = conn.execute("select * from Watchlist").fetchall()
             if items is not None and len(items) > 0:
                 result_code = True
         except Exception as e:
@@ -88,18 +88,18 @@ class WatchList():
 
     ## Input will be: (Uid + Sid)
     @classmethod
-    def add_item(cls, WatchList_item):
+    def add_item(cls, Watchlist_item):
         conn = connection.cursor()
         result_code = False
-        if WatchList_item is not None and len(WatchList_item)==2:
+        if Watchlist_item is not None and len(Watchlist_item)==2:
             try:
                 conn.execute(f"""
-                    insert into WatchList
+                    insert into Watchlist
                        ([Uid],
                        [Sid])
                     values
-                       ({WatchList_item[0]}
-                       ,{WatchList_item[1]})""")
+                       ({Watchlist_item[0]}
+                       ,{Watchlist_item[1]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:
@@ -108,7 +108,7 @@ class WatchList():
                 conn.close()
                 return result_code
         else:
-            print(len(WatchList_item))
+            print(len(Watchlist_item))
             return result_code, None
 
 
@@ -118,7 +118,7 @@ class WatchList():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from WatchList where Sid = {Sid} and Uid={Uid}")
+            conn.execute(f"delete from Watchlist where Sid = {Sid} and Uid={Uid}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -137,7 +137,7 @@ class WatchList():
         if Sid is not None and Uid is not None:
             try:
                 conn.execute(f"""
-                            update WatchList set
+                            update Watchlist set
                                Sid = {Sid}
                                Uid = {Uid}
                             where Sid = {Sid} and Uid={Uid}
@@ -159,7 +159,7 @@ class WatchList():
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from WatchList where Sid = {Sid} and Uid={Uid}").fetchall()
+            items = conn.execute(f"select * from Watchlist where Sid = {Sid} and Uid={Uid}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:
