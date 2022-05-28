@@ -9,16 +9,16 @@ from app_globals import connection
 class Directs():
     __tablename__ = 'Directs'
     # Directs (Sid + Pid)
+    Sid = Column(BigInteger, primary_key=True, autoincrement=True)
     Pid = Column(BigInteger, primary_key=True, autoincrement=True)
-    Age = Column(Integer)
 
     @classmethod
-    def has_item(cls, Directs_id):
+    def has_item(cls, Sid, Pid):
         conn = connection.cursor()
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Directs where Id = {Directs_id}").fetchall()[0]
+            query_item = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -95,8 +95,8 @@ class Directs():
             try:
                 conn.execute(f"""
                     insert into Directs
-                       ([Pid]
-                       ,[Age])
+                       ([Sid]
+                       ,[Pid])
                     values
                        ({Directs_item[0]}
                        ,{Directs_item[1]})""")
@@ -112,13 +112,13 @@ class Directs():
             return result_code, None
 
 
-    # deletes given item from db
+    # deletes given item (Sid + Pid) from db
     @classmethod
-    def delete_item(cls, item_id):
+    def delete_item(cls, Sid, Pid):
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Directs where Id={item_id}")
+            conn.execute(f"delete from Directs where Sid = {Sid} and Pid={Pid}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -129,17 +129,18 @@ class Directs():
 
 
 
-    ## Input will be: Pid + Age
+    ## Input will be: Sid, Pid
     @classmethod
-    def update_item(cls, Directs_id, Age):
+    def update_item(cls, Sid, Pid):
         conn = connection.cursor()
         result_code = False
-        if Directs_id is not None and Age is not None:
+        if Sid is not None and Pid is not None:
             try:
                 conn.execute(f"""
                             update Directs set
-                               Age = {Age}
-                            where Id = {Directs_id}
+                               Sid = {Sid}
+                               Pid = {Pid}
+                            where Sid = {Sid} and Pid={Pid}
                             """)
                 result_code = True
                 conn.commit()
@@ -149,7 +150,7 @@ class Directs():
                 conn.close()
                 return result_code
         else:
-            print(len(Age))
+            print(Pid, Sid)
             return result_code, None
     """
 ## Input will be: Id and (UserTypeId, Name, Surname, Email, Phone, Password, KvkkCheck)
@@ -177,12 +178,12 @@ class Directs():
     """
 
     @classmethod
-    def get_all_by_id(cls, Directs_id):
+    def get_all_by_id(cls, Sid, Pid):
         conn = connection.cursor()
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Directs where Id={Directs_id}").fetchall()
+            items = conn.execute(f"select * from Directs where Sid = {Sid} and Pid={Pid}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:
