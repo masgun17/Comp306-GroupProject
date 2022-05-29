@@ -18,7 +18,7 @@ class Director():
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Director where Id = {Director_id}").fetchall()[0]
+            query_item = conn.execute(f"select * from Director where Pid = {Director_id}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -118,7 +118,7 @@ class Director():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Director where Id={item_id}")
+            conn.execute(f"delete from Director where Pid={item_id}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -139,7 +139,7 @@ class Director():
                 conn.execute(f"""
                             update Director set
                                AwardCount = {AwardCount}
-                            where Id = {Director_id}
+                            where Pid = {Director_id}
                             """)
                 result_code = True
                 conn.commit()
@@ -151,30 +151,6 @@ class Director():
         else:
             print(len(AwardCount))
             return result_code, None
-    """
-## Input will be: Id and (UserTypeId, Name, Surname, Email, Phone, Password, KvkkCheck)
-    @classmethod
-    def change_password(cls, Director_id, newPassword):
-        conn = connection.cursor()
-        result_code = False
-        if Director_id is not None and newPassword is not None:
-            try:
-                conn.execute(f'''
-                            update Director set
-                               Password = '{newPassword}'
-                            where Id = {Director_id}
-                            ''')
-                result_code = True
-                conn.commit()
-            except Exception as e:
-                print(e)
-            finally:
-                conn.close()
-                return result_code
-        else:
-            print(len(Director_id))
-            return result_code, None
-    """
 
     @classmethod
     def get_all_by_id(cls, Director_id):
@@ -182,7 +158,7 @@ class Director():
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from Director where Id={Director_id}").fetchall()
+            items = conn.execute(f"select * from Director where Pid={Director_id}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:

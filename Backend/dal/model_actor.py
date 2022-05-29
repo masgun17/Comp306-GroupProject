@@ -6,20 +6,19 @@ from sqlalchemy.dialects.mysql import pymysql
 
 from app_globals import connection
 
-class People():
-    __tablename__ = 'People'
-    # People (Id + Name + Surname)
-    Id = Column(BigInteger, primary_key=True, autoincrement=True)
-    Name = Column(String)
-    Surname = Column(String)
+class Actor():
+    __tablename__ = 'Actor'
+    # Actor (Pid + Age)
+    Pid = Column(BigInteger, primary_key=True, autoincrement=True)
+    Age = Column(Integer)
 
     @classmethod
-    def has_item(cls, people_id):
+    def has_item(cls, Actor_id):
         conn = connection.cursor()
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from People where Id = {people_id}").fetchall()[0]
+            query_item = conn.execute(f"select * from Actor where Pid = {Actor_id}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -36,7 +35,7 @@ class People():
         result_code = False
         try:
             if column_value is not None and column_name is not None and len(column_name) > 0:
-                items = conn.execute(f"select * from People where {column_name} = '{column_value}'").fetchall()
+                items = conn.execute(f"select * from Actor where {column_name} = '{column_value}'").fetchall()
                 if items is not None and len(items) > 0:
                     result_code = True
                     if first_n is not None:
@@ -56,7 +55,7 @@ class People():
         try:
             if column_values is not None and column_names is not None \
                     and len(column_names) > 0 and len(column_names)==len(column_values):
-                query = "select * from People where " + column_names[0] + " = '" + column_values[0] + "' "
+                query = "select * from Actor where " + column_names[0] + " = '" + column_values[0] + "' "
                 for i in range(len(column_names)-1):
                     query = query + " and " + column_names[i] + " = '" + column_values[i] + "' "
                 items = conn.execute(query).fetchall()
@@ -77,7 +76,7 @@ class People():
         items = None
         result_code = False
         try:
-            items = conn.execute("select * from People").fetchall()
+            items = conn.execute("select * from Actor").fetchall()
             if items is not None and len(items) > 0:
                 result_code = True
         except Exception as e:
@@ -87,22 +86,20 @@ class People():
             return result_code, items
 
 
-    ## Input will be:  (Id + Name + Surname)
+    ## Input will be: (Pid + Age)
     @classmethod
-    def add_item(cls, people_item):
+    def add_item(cls, Actor_item):
         conn = connection.cursor()
         result_code = False
-        if people_item is not None and len(people_item)==3:
+        if Actor_item is not None and len(Actor_item)==2:
             try:
                 conn.execute(f"""
-                    insert into People
-                       ([Id]
-                       ,[Name]
-                       ,[Surname])
+                    insert into Actor
+                       ([Pid]
+                       ,[Age])
                     values
-                       ({people_item[0]}
-                       ,'{people_item[1]}'
-                       ,'{people_item[2]}')""")
+                       ({Actor_item[0]}
+                       ,{Actor_item[1]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:
@@ -111,7 +108,7 @@ class People():
                 conn.close()
                 return result_code
         else:
-            print(len(people_item))
+            print(len(Actor_item))
             return result_code, None
 
 
@@ -121,7 +118,7 @@ class People():
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from People where Id={item_id}")
+            conn.execute(f"delete from Actor where Pid={item_id}")
             result_code = True
             conn.commit()
         except Exception as e:
@@ -132,19 +129,17 @@ class People():
 
 
 
-    ## Input will be: Id and  (Id + Name + Surname)
+    ## Input will be: Pid + Age
     @classmethod
-    def update_item(cls, people_id, people_item):
+    def update_item(cls, Actor_id, Age):
         conn = connection.cursor()
         result_code = False
-        if people_id is not None and people_item is not None and len(people_item) == 3:
+        if Actor_id is not None and Age is not None:
             try:
                 conn.execute(f"""
-                            update People set
-                               Id = {people_item[0]}
-                               ,Name = '{people_item[1]}'
-                               ,Surname = '{people_item[2]}'
-                            where Id = {people_id}
+                            update Actor set
+                               Age = {Age}
+                            where Pid = {Actor_id}
                             """)
                 result_code = True
                 conn.commit()
@@ -154,16 +149,16 @@ class People():
                 conn.close()
                 return result_code
         else:
-            print(len(people_item))
+            print(len(Age))
             return result_code, None
 
     @classmethod
-    def get_all_by_id(cls, people_id):
+    def get_all_by_id(cls, Actor_id):
         conn = connection.cursor()
         items = None
         result_code = False
         try:
-            items = conn.execute(f"select * from People where Id={people_id}").fetchall()
+            items = conn.execute(f"select * from Actor where Pid={Actor_id}").fetchall()
             conn.commit()
             print(items)
             if items is not None and len(items) > 0:

@@ -157,30 +157,6 @@ class Users():
         else:
             print(len(user_item))
             return result_code, None
-    """
-## Input will be: Id and (UserTypeId, Name, Surname, Email, Phone, Password, KvkkCheck)
-    @classmethod
-    def change_password(cls, user_id, newPassword):
-        conn = connection.cursor()
-        result_code = False
-        if user_id is not None and newPassword is not None:
-            try:
-                conn.execute(f'''
-                            update Users set
-                               Password = '{newPassword}'
-                            where Id = {user_id}
-                            ''')
-                result_code = True
-                conn.commit()
-            except Exception as e:
-                print(e)
-            finally:
-                conn.close()
-                return result_code
-        else:
-            print(len(user_id))
-            return result_code, None
-    """
 
     @classmethod
     def get_all_by_id(cls, userId):
