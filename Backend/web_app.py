@@ -76,5 +76,5 @@ def login():
     password = personInfo['password']
     if len(password)==0: 
         return "Enter your password"
-    return hashingPassword.checkingPasswordWithDatabase(username,password) #Databaseden gelen şifre ile girilen şifrenin aynı olmasının kontrolü
+    return hashingPassword.checkingPasswordWithDatabase(username,password) 
 app.run()

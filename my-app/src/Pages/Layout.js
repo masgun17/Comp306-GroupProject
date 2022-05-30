@@ -14,7 +14,7 @@ const Layout = () => {
           null
         )}
           {userLogged === 'true' ? (
-          <button class="btn btn-dark" style={{ "font-size": "30px" }} type="button" onClick={() => {
+          <button class="btn btn-primary" style={{ "font-size": "30px" }} onClick={() => {
             sessionStorage.setItem('username', '');
             sessionStorage.setItem('isLogin', 'false');
             window.location.reload(false);
