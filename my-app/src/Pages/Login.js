@@ -3,10 +3,14 @@ import "../Css/Login.css";
 import { useState, useContext} from 'react';
 import { useNavigate } from "react-router-dom";
 import { loginAction } from "../Tools/actions";
+// import {toast} from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
+
 const Login = () => {
     const navigate = useNavigate();
     const [username, setUsername] = useState(0);
     const [password, setPassword] = useState(0);
+    //toast.configure();
 
     async function loginForm(username, password) {
         var jsonData = {
@@ -16,13 +20,29 @@ const Login = () => {
           }]
         }
         const a = await loginAction(jsonData);
-        if(a["Login"]){
-            sessionStorage.setItem('isLogin', 'true')
+                    sessionStorage.setItem('isLogin', 'true')
             sessionStorage.setItem('username', a["Username"])
             navigate("/");
             window.location.reload(false);
-        }
-        console.log(a);
+        // if(a["Login"]){
+        //     sessionStorage.setItem('isLogin', 'true')
+        //     sessionStorage.setItem('username', a["Username"])
+        //     navigate("/");
+        //     window.location.reload(false);
+        // }
+        // if(a==="Enter your username!"){
+        //     toast.warning('Enter your username!',
+        // {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        // }else if(a==="Enter your password"){
+        //     toast.warning('Enter your password',
+        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        //  }else if(a==="This account is not in the database"){
+        //     toast.warning('This account is not in the database',
+        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        // }else if(a==="Login unsuccessful"){
+        //     toast.warning('Login unsuccessful',
+        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        // }
       }
 
 

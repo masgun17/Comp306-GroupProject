@@ -201,3 +201,68 @@ class Shows():
             return result_code, items
 
 
+    @classmethod
+    def getGenres(cls):
+        conn = connection.cursor()
+        query_item = None
+        result_code = False
+        try:
+            query_item = conn.execute(f"""IF OBJECT_ID(N'tempdb..#Temp') IS NOT NULL
+BEGIN
+DROP TABLE #Temp
+END
+CREATE TABLE #Temp
+(
+  Listed_In  varchar(255),
+)
+
+DECLARE @i int = -1
+WHILE @i < 18491
+
+BEGIN
+DECLARE @StringList AS VARCHAR(1000)= (SELECT Listed_In
+FROM (
+SELECT ROW_NUMBER() OVER (ORDER BY Id) AS RowNum, Listed_In
+FROM [Comp306].[dbo].[Shows]
+) T
+WHERE RowNum IN (@i))
+
+INSERT INTO #Temp
+SELECT 
+    value 
+FROM 
+    STRING_SPLIT(@StringList,',')
+
+SET @i = @i + 1
+end
+ SELECT distinct * FROM #Temp""").fetchall()[0]
+            if query_item is not None:
+                ## item = {"Id": query_item[0][0], "showId": query_item[0][1], "AddDate": query_item[0][2]}
+                print(query_item)
+                result_code = True
+        except Exception as e:
+            print(e)
+        finally:
+            conn.close()
+            return result_code, query_item
+
+
+    @classmethod
+    def getCountries(cls):
+        conn = connection.cursor()
+        query_item = None
+        result_code = False
+        try:
+            query_item = conn.execute(f" select distinct Country from Shows where Country NOT LIKE '%,%'").fetchall()
+            if query_item is not None:
+                ## item = {"Id": query_item[0][0], "showId": query_item[0][1], "AddDate": query_item[0][2]}
+                print(query_item)
+                result_code = True
+        except Exception as e:
+            print(e)
+        finally:
+            conn.close()
+            return result_code, query_item
+
+
+

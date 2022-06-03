@@ -1,13 +1,14 @@
 import "../Css/Login.css";
 import { useState, useContext } from 'react';
 import { signupAction } from "../Tools/actions";
-import {toast} from 'react-toastify';
+// import {toast} from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
+
 const Signup = () => {
     const [username, setUsername] = useState(0);
     const [password, setPassword] = useState(0);
-    //toast.configure();
+    // toast.configure();
     const navigate = useNavigate();
     async function signupForm(username, password) {
         var jsonData = {

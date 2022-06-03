@@ -16,5 +16,11 @@ export const signupService = async (data) =>
     axios.post(API.login, data).then(resolve).catch(reject);
   });
 
+  export const getGenreOptionsService = async () =>
+  new Promise((resolve, reject) => {
+    axios.post(API.getGenreOptions).then(resolve).catch(reject);
+  });
+
+
 
   

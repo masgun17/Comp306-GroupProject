@@ -29,3 +29,13 @@ export const loginAction = async (data) => {
     }
   };
 
+  export const getGenreOptionsAction = async () => {
+    try {
+      const result = await services.getGenreOptionsService();
+      return result.data;
+    } catch (error) {
+      console.log("Error on getGenreOptionsAction");
+      console.log(error);
+    }
+  };
+

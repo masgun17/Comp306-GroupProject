@@ -12,6 +12,7 @@ from werkzeug.utils import redirect
 from sqlalchemy import create_engine, text
 import pyodbc
 import pandas as pd
+from dal.model_shows import Shows
 from dal import hashingPassword
 import codecs
 from dal.model_users import Users
@@ -77,4 +78,18 @@ def login():
     if len(password)==0: 
         return "Enter your password"
     return hashingPassword.checkingPasswordWithDatabase(username,password) 
+
+@app.route("/getGenreOptions",   methods=['POST', 'GET']) 
+def getGenreOptions():
+    result_code, countries = Shows.getCountries()
+    print(countries)
+    data = []
+    for country in countries:
+        line = dict()    
+        line["value"] = country[0]
+        line["label"] = country[0]
+        data.append(line)
+    print(data)
+    return json.dumps(data)
+
 app.run()
