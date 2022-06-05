@@ -5,6 +5,8 @@ import Login from "./Pages/Login";
 import ProfilePage from "./Pages/ProfilePage";
 import Signup from "./Pages/Signup";
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 function App() {
   return (
     <BrowserRouter>

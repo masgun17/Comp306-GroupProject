@@ -39,3 +39,23 @@ export const loginAction = async (data) => {
     }
   };
 
+  export const getCountryOptionsAction = async () => {
+    try {
+      const result = await services.getCountryOptionsService();
+      return result.data;
+    } catch (error) {
+      console.log("Error on getCountryOptionsService");
+      console.log(error);
+    }
+  };
+
+  export const getSearchFilmAction = async (data) =>{
+    try {
+      const result = await services.getSearchFilmService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on getSearchFilmAction");
+      console.log(error);
+    }
+  }
+

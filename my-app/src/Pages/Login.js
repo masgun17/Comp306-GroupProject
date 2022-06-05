@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import "../Css/Login.css";
+import "../Styles/Login.css";
 import { useState, useContext} from 'react';
 import { useNavigate } from "react-router-dom";
 import { loginAction } from "../Tools/actions";

@@ -3,5 +3,7 @@ export default {
     fetchDB: '/fetchdb',
     login: '/login',
     getGenreOptions: '/getGenreOptions',
+    getCountryOptions: '/getCountryOptions',
+    searchFilm: '/searchFilm',
 };
 

@@ -1,4 +1,4 @@
-import "../Css/Login.css";
+import "../Styles/Login.css";
 import { useState, useContext } from 'react';
 import { signupAction } from "../Tools/actions";
 // import {toast} from 'react-toastify';

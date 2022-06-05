@@ -79,17 +79,37 @@ def login():
         return "Enter your password"
     return hashingPassword.checkingPasswordWithDatabase(username,password) 
 
-@app.route("/getGenreOptions",   methods=['POST', 'GET']) 
-def getGenreOptions():
+@app.route("/getCountryOptions",   methods=['POST', 'GET']) 
+def getCountryOptions():
     result_code, countries = Shows.getCountries()
     print(countries)
     data = []
-    for country in countries:
-        line = dict()    
-        line["value"] = country[0]
-        line["label"] = country[0]
-        data.append(line)
+    if result_code:
+        for country in countries:
+            line = dict()    
+            line["value"] = country[0]
+            line["label"] = country[0]
+            data.append(line)
     print(data)
     return json.dumps(data)
+
+@app.route("/getGenreOptions",   methods=['POST', 'GET']) 
+def getGenreOptions():
+    result_code, genres = Shows.getGenres()
+    print(genres)
+    data = []
+    if result_code:
+        for genre in genres:
+            line = dict()    
+            line["value"] = genre[0]
+            line["label"] = genre[0]
+            data.append(line)
+    print(data)
+    return json.dumps(data)
+
+@app.route("/searchFilm", methods=['POST', 'GET'])
+def searchFilm():
+    return "lasnlkam"
+
 
 app.run()
