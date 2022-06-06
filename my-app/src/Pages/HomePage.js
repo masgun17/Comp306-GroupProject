@@ -19,32 +19,17 @@ const HomePage = () => {
   const [director, setDirector] = useState("");
   const [isCheckedNetflix, setIsCheckedNetflix] = useState(true);
   const [isCheckedAmazon, setIsCheckedAmazon] = useState(true);
-  const [releaseYearTo, setReleaseYearTo] = useState();
-  const [releaseYearFrom, setReleaseYearFrom] = useState();
+  const [releaseYearTo, setReleaseYearTo] = useState(2023);
+  const [releaseYearFrom, setReleaseYearFrom] = useState(0);
   const [type, setType] = useState("0");
   const [duration, setDuration] = useState("");
 
-  const [filmInfo, setFilmInfo] = useState([
-    {
-      title: "The Grand Seduction",
-      type: "Movie",
-      duration: "113 min",
-      platform: "Netflix",
-      director: "Don McKellar",
-      actor: "Brendan Gleeson, Taylor Kitsch, Gordon Pinsent",
-      year: "2022",
-      genre: "Comedy, Drama",
-      country: "Canada",
-      rating: "+18",
-      description: "A small fishing village must procure a local doctor to secure a lucrative business contract. When unlikely candidate and big city doctor Paul Lewis lands in their lap for a trial residence, the townsfolk rally together to charm him into staying. As the doctor's time in the village winds to a close, acting mayor Murray French has no choice but to pull out all the stops.",
-    }
-    
-  ]);
-  const [durationArr, setDurationArr] = useState([]);
-  const [genreArr, setGenreArr] = useState();
-  const [countryArr, setCountryArr] = useState();
+  const [filmInfo, setFilmInfo] = useState([""]);
+  const [durationArr, setDurationArr] = useState([""]);
+  const [genreArr, setGenreArr] = useState("");
+  const [countryArr, setCountryArr] = useState("");
   const [showModal, setShowModal] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState("");
   // const options = [
   //   { value: "chocolate", label: "Chocolate" },
   //   { value: "strawberry", label: "Strawberry" },

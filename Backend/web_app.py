@@ -22,9 +22,9 @@ app = Flask("comp306")
 ## print('Your IP is {0}'.format(response.json()['origin']))
 
 # Trusted Connection to Named Instance
-"""connection = pyodbc.connect(
+connection = pyodbc.connect(
     'DRIVER={ODBC Driver 17 for SQL Server}; SERVER=localhost\SQLEXPRESS;DATABASE=Comp306;Trusted_Connection=yes;')
-conn = connection.cursor()"""
+
 
 
 @app.route("/")
@@ -115,6 +115,7 @@ def searchFilm():
     data = []
 
     form = json.loads(request.data)
+    form = form["data"][0]
     title = form['title'] # string
     year_small = form['year_small'] # integer
     year_big = form['year_big'] # integer
@@ -234,7 +235,10 @@ def searchFilm():
                 line["type"] = item[1]
                 line["title"] = item[2]
                 line["country"] = item[3]
-                line["date_added"] = item[4]
+                if item[4] is not None:
+                    line["date_added"] = item[4].strftime("%d/%m/%Y")
+                else:
+                    line["date_added"] = ""
                 line["year"] = item[5]
                 line["rating"] = item[6]
                 line["duration"] = item[7]
