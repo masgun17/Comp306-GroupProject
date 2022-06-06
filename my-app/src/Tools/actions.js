@@ -109,6 +109,16 @@ export const loginAction = async (data) => {
     }
   }
 
+  export const getTopShowsAction = async () => {
+    try {
+      const result = await services.getTopShowsService();
+      return result.data;
+    } catch (error) {
+      console.log("Error on getTopShowsAction");
+      console.log(error);
+    }
+  };
+
 
   
   

@@ -56,6 +56,11 @@ export const signupService = async (data) =>
     axios.post(API.createComment, data).then(resolve).catch(reject);
   })
   
+  export const getTopShowsService = async () =>
+  new Promise((resolve, reject) => {
+    axios.get(API.getTopShows).then(resolve).catch(reject);
+  });
+  
   
 
 
