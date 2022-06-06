@@ -14,6 +14,7 @@ import pyodbc
 import pandas as pd
 from dal.model_shows import Shows
 from dal.model_watchlist import Watchlist
+from dal.model_comments import Comments
 from dal import hashingPassword
 import codecs
 from dal.model_users import Users
@@ -488,4 +489,36 @@ def getShow():
         return json.dumps(data)
         conn.close()
         return data
+
+    @app.route("/createComment", methods=['POST', 'GET'])
+    def createComment():
+
+        conn = connection.cursor()
+        items = []
+        result_code = False
+        data = []
+        form = json.loads(request.data)
+        form = form["data"][0]
+        Sid = form['Sid']  # int
+        Uid = form['Uid']  # int
+        Comment = form['Comment']  # string
+        Rating = form['Rating']  # int
+
+        try:
+            result_code = Comment.add_item([Uid, Sid, Comment, Rating])
+            if result_code:
+                return 'Comment added Successfully'
+            else:
+                return 'Bad Request '
+        except Exception as e:
+            print(e)
+            return 'Bad Request Exception'
+
+
+
+
+
+
+
+
 app.run()
