@@ -796,4 +796,77 @@ def timePerGenre():
         conn.close()
         return data
 
+
+
+@app.route("/getTopShows", methods=['POST', 'GET'])
+def getTopShows():
+    try:
+        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(com.Rating),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(com.Rating) desc"
+        print(query)
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+
+        if result_code:
+            for item in items:
+                line = dict()
+                line["id"] = item[0]
+                line["type"] = item[1]
+                line["title"] = item[2]
+                line["country"] = item[3]
+                if item[4] is not None:
+                    line["date_added"] = item[4].strftime("%d/%m/%Y")
+                else:
+                    line["date_added"] = ""
+                line["year"] = item[5]
+                line["rating"] = item[6]
+                line["duration"] = item[7]
+                line["genre"] = item[8]
+                line["description"] = item[9]
+                line["platform"] = item[10]
+
+                actors = item[11]
+                actor_dict = {}
+                actors_string = ""
+                if actors is not None and len(actors) > 0:
+                    actor_list = actors.split(",")
+                    for actor in actor_list:
+                        if actor is not None and len(actor) > 0:
+                            actor_name = actor.strip()
+                            if actor_name not in actor_dict.keys():
+                                actor_dict[actor_name] = "exist"
+                                actors_string = actors_string + actor_name + ", "
+                    actors_string = actors_string[0:-2]
+                line["actor"] = actors_string
+
+                directors = item[12]
+                directors_dict = {}
+                directors_string = ""
+                if directors is not None and len(directors) > 0:
+                    directors_list = directors.split(",")
+                    for director in directors_list:
+                        if director is not None and len(director) > 0:
+                            director_name = director.strip()
+                            if director_name not in directors_dict.keys():
+                                directors_dict[director_name] = "exist"
+                                directors_string = directors_string + director_name + ", "
+                    directors_string = directors_string[0:-2]
+                line["director"] = directors_string
+                line["average"] = item[13]
+
+                data.append(line)
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
+
+
+
+
+
+
+
 app.run()
