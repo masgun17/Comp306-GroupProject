@@ -328,8 +328,10 @@ def getComments():
     form = json.loads(request.data)
     form = form["data"][0]
     Sid = form['Sid']  # int
+    rating_small = form['rating_small']  # int
+    rating_big = form['rating_big']  # int
     try:
-        query = f"select u.Username, c.Comment, c.Rating from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid}"
+        query = f"select u.Username, c.Comment, c.Rating from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid} and c.Rating >= {rating_small} and c.Rating <= {rating_big}"
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
             result_code = True
