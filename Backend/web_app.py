@@ -512,7 +512,7 @@ def createComment():
     Rating = form['Rating']  # int
 
     try:
-        result_code = Comment.add_item([Uid, Sid, Comment, Rating])
+        result_code = Comments.add_item([Uid, Sid, Comment, Rating])
         if result_code:
             return 'Comment added Successfully'
         else:
@@ -701,6 +701,171 @@ def searchFromWatchWishList():
         return json.dumps(data)
         conn.close()
         return data
+
+
+
+@app.route("/timePerGenre", methods=['POST', 'GET'])
+def timePerGenre():
+    conn = connection.cursor()
+    items = []
+    result_code = False
+    data = []
+
+    form = json.loads(request.data)
+    form = form["data"][0]
+    Uid = form['Uid']  # int
+    try:
+        query = f"""
+            IF OBJECT_ID(N'tempdb..#Temp') IS NOT NULL
+            BEGIN
+            DROP TABLE #Temp
+            END
+            CREATE TABLE #Temp
+            (
+              Listed_In  varchar(255),
+            )
+            
+            IF OBJECT_ID(N'tempdb..#Temp2') IS NOT NULL
+            BEGIN
+            DROP TABLE #Temp2
+            END
+            CREATE TABLE #Temp2
+            (
+                Id bigint IDENTITY(1,1),
+              Listed_In  varchar(255),
+            )
+            
+            
+            INSERT INTO #Temp2
+            SELECT T.Listed_In
+                FROM (
+                    SELECT Listed_In
+                    FROM [Comp306].[dbo].[Shows] WHERE Id IN (select Sid from Watchlist where Uid = 1 and Flag = 0)
+                ) as T
+            
+            
+            DECLARE @i int = 1
+            WHILE @i <= (select top(1) count(*) as c from Watchlist where Uid = 1 and Flag = 0 group by uid)
+            
+            
+            BEGIN
+            DECLARE @StringList AS VARCHAR(1000)= (SELECT Listed_In
+            FROM (
+            SELECT ROW_NUMBER() OVER (ORDER BY Id) AS RowNum, Listed_In
+            FROM #Temp2
+            ) T
+            WHERE RowNum IN (@i))
+            
+            INSERT INTO #Temp
+            SELECT 
+                TRIM(value) 
+            FROM 
+                STRING_SPLIT(@StringList,',')
+            
+            SET @i = @i + 1
+            end
+            
+             select sums.Listed_In, isnull(sum(sums.movie),0) as MovieSum, isnull(sum(sums.tvs),0) as TVSum from (
+             select t.Listed_In  , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'Movie') as int)) as movie
+             , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'TV Show') as int)) as tvs
+             from Users as u 
+             left join Watchlist as w on (u.Id = w.Uid and w.Flag = 0)
+             left join Shows as s on (w.Sid = s.Id), #Temp as t
+             where s.Listed_In like CONCAT('%', t.Listed_In ,'%') and u.Id = {Uid}
+             group by t.Listed_In, s.Duration, s.Type
+             ) as sums
+             group by sums.Listed_In
+        
+                    """
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+        if result_code:
+            for item in items:
+                line = dict()
+                line["Listed_In"] = item[0]
+                line["MovieSum"] = item[1]
+                line["TVSum"] = item[2]
+                data.append(line)
+        print(query)
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
+
+
+
+@app.route("/getTopShows", methods=['POST', 'GET'])
+def getTopShows():
+    try:
+        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(com.Rating),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(com.Rating) desc"
+        print(query)
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+
+        if result_code:
+            for item in items:
+                line = dict()
+                line["id"] = item[0]
+                line["type"] = item[1]
+                line["title"] = item[2]
+                line["country"] = item[3]
+                if item[4] is not None:
+                    line["date_added"] = item[4].strftime("%d/%m/%Y")
+                else:
+                    line["date_added"] = ""
+                line["year"] = item[5]
+                line["rating"] = item[6]
+                line["duration"] = item[7]
+                line["genre"] = item[8]
+                line["description"] = item[9]
+                line["platform"] = item[10]
+
+                actors = item[11]
+                actor_dict = {}
+                actors_string = ""
+                if actors is not None and len(actors) > 0:
+                    actor_list = actors.split(",")
+                    for actor in actor_list:
+                        if actor is not None and len(actor) > 0:
+                            actor_name = actor.strip()
+                            if actor_name not in actor_dict.keys():
+                                actor_dict[actor_name] = "exist"
+                                actors_string = actors_string + actor_name + ", "
+                    actors_string = actors_string[0:-2]
+                line["actor"] = actors_string
+
+                directors = item[12]
+                directors_dict = {}
+                directors_string = ""
+                if directors is not None and len(directors) > 0:
+                    directors_list = directors.split(",")
+                    for director in directors_list:
+                        if director is not None and len(director) > 0:
+                            director_name = director.strip()
+                            if director_name not in directors_dict.keys():
+                                directors_dict[director_name] = "exist"
+                                directors_string = directors_string + director_name + ", "
+                    directors_string = directors_string[0:-2]
+                line["director"] = directors_string
+                line["average"] = item[13]
+
+                data.append(line)
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
+
+
+
+
 
 
 

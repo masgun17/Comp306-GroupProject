@@ -89,6 +89,16 @@ export const loginAction = async (data) => {
     }
   }
 
+  export const createCommentAction = async (data) =>{
+    try {
+      const result = await services.createCommentService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on createCommentAction");
+      console.log(error);
+    }
+  }
+  
 
   
   

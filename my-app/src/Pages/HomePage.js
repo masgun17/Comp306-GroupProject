@@ -13,11 +13,11 @@ import AsyncSelect from "react-select/async";
 import "../Styles/HomePage.css";
 import FilmDetailModal from "./FilmDetailModal";
 import { countries, genres } from "../Tools/constants.js";
-import {toast} from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 const HomePage = () => {
-  let userLogged = sessionStorage.getItem('isLogin');
-  let uid = sessionStorage.getItem('uid');
+  let userLogged = sessionStorage.getItem("isLogin");
+  let uid = sessionStorage.getItem("uid");
   toast.configure();
 
   const [title, setTitle] = useState("");
@@ -70,57 +70,66 @@ const HomePage = () => {
   };
 
   const animatedComponents = makeAnimated();
-  
-  const addToWishList = async (sid,uid) =>{
+
+  const addToWishList = async (sid, uid) => {
     var jsonData = {
       data: [
         {
           sid: sid,
           uid: uid,
           flag: 1,
-          
         },
       ],
     };
     const result = await addToListAction(jsonData);
-    if(result==="Movie removed from your list"){
-      toast.success("Movie removed from your wish list",
-  {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-  }else if(result==="Movie added successfully."){
-      toast.success("Movie added to your wish successfully.",
-      {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-   }else if(result==="Movie is already in your list."){
-    toast.warning("Movie is already in your list.",
-    {position: toast.POSITION.TOP_CENTER, autoClose:2000})
- }
+    if (result === "Movie removed from your list") {
+      toast.success("Movie removed from your wish list", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    } else if (result === "Movie added successfully.") {
+      toast.success("Movie added to your wish successfully.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    } else if (result === "Movie is already in your list.") {
+      toast.warning("Movie is already in your list.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    }
     console.log(result);
-  }
+  };
 
-  const addToWatchList = async (sid,uid) =>{
+  const addToWatchList = async (sid, uid) => {
     var jsonData = {
       data: [
         {
           sid: sid,
           uid: uid,
           flag: 0,
-          
         },
       ],
     };
     const result = await addToListAction(jsonData);
-    if(result==="Movie removed from your list"){
-      toast.success("Movie removed from your watch list",
-  {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-  }else if(result==="Movie added successfully."){
-      toast.success("Movie added to your watch successfully.",
-      {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-   }else if(result==="Movie is already in your list."){
-    toast.warning("Movie is already in your list.",
-    {position: toast.POSITION.TOP_CENTER, autoClose:2000})
- }
+    if (result === "Movie removed from your list") {
+      toast.success("Movie removed from your watch list", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    } else if (result === "Movie added successfully.") {
+      toast.success("Movie added to your watch successfully.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    } else if (result === "Movie is already in your list.") {
+      toast.warning("Movie is already in your list.", {
+        position: toast.POSITION.TOP_CENTER,
+        autoClose: 2000,
+      });
+    }
     console.log(result);
-
-  }
+  };
 
   const onSearch = async () => {
     let duration_small = "0";
@@ -463,96 +472,99 @@ const HomePage = () => {
           Search
         </button>
       </div>
-      
+
       {filmInfo === "first" && <div></div>}
-      {filmInfo !== "first" && <div className="FilmList">
-        {filmInfo && filmInfo.length === 0 && <div>No result</div>}
-        {filmInfo &&
-          filmInfo.map((element, index) => (
-            <div className="FilmDivWrapper">
-              <div
-                className="FilmDiv"
-                onClick={() => {
-                  setSelected(element);
-                  setShowModal(true);
-                }}
-              >
-                {/* Title / Type / Duration / Platform ---
+      {filmInfo !== "first" && (
+        <div className="FilmList">
+          {filmInfo && filmInfo.length === 0 && <div>No result</div>}
+          {filmInfo &&
+            filmInfo.map((element, index) => (
+              <div className="FilmDivWrapper">
+                <div
+                  className="FilmDiv"
+                  onClick={() => {
+                    setSelected(element);
+                    setShowModal(true);
+                  }}
+                >
+                  {/* Title / Type / Duration / Platform ---
           Director / Actor  ---
           Year / Genre / Country / Rating */}
-                <div className="FilmDivFirstRow">
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Title:
-                  </b>
-                  {element.title}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Type:
-                  </b>
-                  {element.type}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Duration:
-                  </b>
-                  {element.duration}
+                  <div className="FilmDivFirstRow">
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Title:
+                    </b>
+                    {element.title}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Type:
+                    </b>
+                    {element.type}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Duration:
+                    </b>
+                    {element.duration}
+                  </div>
+                  <div className="FilmDivSecondRow">
+                    {/* Director / Actor */}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Director:
+                    </b>
+                    {element.director}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Actor:
+                    </b>
+                    {element.actor}
+                  </div>
+                  <div className="FilmDivThirdRow">
+                    {/* Year / Genre / Country / Rating */}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Platform:
+                    </b>
+                    {element.platform}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Year:
+                    </b>
+                    {element.year}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Genre:
+                    </b>
+                    {element.genre}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Country:
+                    </b>
+                    {element.country}
+                    <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                      Rating:
+                    </b>
+                    {element.rating}
+                  </div>
                 </div>
-                <div className="FilmDivSecondRow">
-                  {/* Director / Actor */}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Director:
-                  </b>
-                  {element.director}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Actor:
-                  </b>
-                  {element.actor}
-                </div>
-                <div className="FilmDivThirdRow">
-                  {/* Year / Genre / Country / Rating */}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Platform:
-                  </b>
-                  {element.platform}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Year:
-                  </b>
-                  {element.year}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Genre:
-                  </b>
-                  {element.genre}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Country:
-                  </b>
-                  {element.country}
-                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
-                    Rating:
-                  </b>
-                  {element.rating}
-                </div>
+                {userLogged === "true" ? (
+                  <>
+                    <div
+                      type="button"
+                      className="FilmDivButton FilmDivWatchlistButton"
+                      onClick={() => {
+                        addToWatchList(element.id, uid);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faCheck} />
+                    </div>
+                    <div
+                      type="button"
+                      className="FilmDivButton FilmDivWishlistButton"
+                      onClick={() => {
+                        addToWishList(element.id, uid);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faHeart} />
+                    </div>
+                  </>
+                ) : null}
               </div>
-              {userLogged === 'true' ? (
-                <>
-              <div
-                type="button"
-                className="FilmDivButton FilmDivWatchlistButton"
-                onClick={() => {addToWatchList(element.id, uid )}}
-              >
-                <FontAwesomeIcon icon={faCheck} />
-              </div>
-              <div
-                type="button"
-                className="FilmDivButton FilmDivWishlistButton"
-                onClick={() => {addToWishList(element.id, uid )}}
-              >
-                <FontAwesomeIcon icon={faHeart} />
-              </div>
-              </>
-              ):(
-                null
-              )}
-            </div>
-          ))}
-      </div>}
-      
+            ))}
+        </div>
+      )}
 
       <FilmDetailModal
         show={showModal}

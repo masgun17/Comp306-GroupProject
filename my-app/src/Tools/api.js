@@ -6,5 +6,6 @@ export default {
     getComments: '/getComments',
     getRatingCounts: '/getRatingCounts',
     addToList: '/addToList',
+    createComment: '/createComment',
 };
 
