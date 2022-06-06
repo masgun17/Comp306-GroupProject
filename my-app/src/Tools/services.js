@@ -61,6 +61,12 @@ export const signupService = async (data) =>
     axios.get(API.getTopShows).then(resolve).catch(reject);
   });
   
+  export const timePerGenreService = async (data) => 
+  new Promise((resolve, reject) => {
+    axios.post(API.timePerGenre, data).then(resolve).catch(reject);
+  })
+
+  
   
 
 

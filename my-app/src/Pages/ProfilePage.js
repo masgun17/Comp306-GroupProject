@@ -18,6 +18,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../Styles/ProfilePage.css";
 import "../Styles/HomePage.css";
+import StatisticsModal from "./StatisticsModal";
 
 const ProfilePage = () => {
   let userLogged = sessionStorage.getItem("isLogin");
@@ -41,7 +42,8 @@ const ProfilePage = () => {
   const [durationArr, setDurationArr] = useState();
   const [genreArr, setGenreArr] = useState();
   const [countryArr, setCountryArr] = useState();
-  const [showModal, setShowModal] = useState(false);
+  const [showModalFilm, setShowModalFilm] = useState(false);
+  const [showModalStatistics, setShowModalStatistics] = useState(false);
   const [selected, setSelected] = useState("");
 
   const seasonDuration = [
@@ -131,7 +133,7 @@ const ProfilePage = () => {
       const result1 = searchFromWatchWishListAction(jsonData1).then((a) =>
         setWatchedListInfo(a)
       );
-      console.log(result1);
+    //   console.log(result1);
 
       //   setWatchedListInfo(result1);
     }, 200);
@@ -163,14 +165,6 @@ const ProfilePage = () => {
       //   setWishlistInfo(result2);
     }, 500);
   }, []);
-
-  //   useEffect(() => {
-  //     console.log(watchedListInfo, "watched");
-  //     console.log(wishlistInfo, "wish");
-  //   }, [watchedListInfo, wishlistInfo]);
-
-  // const [genreOptions, setGenreOptions] = useState([]);
-  // const [countryOptions, setCountryOptions] = useState([]);
 
   const handleOnChangeNetflix = () => {
     setIsCheckedNetflix(!isCheckedNetflix);
@@ -491,80 +485,15 @@ const ProfilePage = () => {
       //   setWishlistInfo(result2);
     }, 500);
   };
-  const onSearch = async () => {
-    let duration_small = "0";
-    let duration_big = "2023";
-    if (durationArr) {
-      if (durationArr.value === "1") {
-        duration_small = "1";
-        duration_big = "1";
-      } else if (durationArr.value === "2-5") {
-        duration_small = "2";
-        duration_big = "5";
-      } else if (durationArr.value === "5-10") {
-        duration_small = "5";
-        duration_big = "10";
-      } else if (durationArr.value === "10") {
-        duration_small = "10";
-        duration_big = "2023";
-      } else if (durationArr.value === "0-30") {
-        duration_small = "0";
-        duration_big = "30";
-      } else if (durationArr.value === "30-60") {
-        duration_small = "30";
-        duration_big = "60";
-      } else if (durationArr.value === "60-90") {
-        duration_small = "60";
-        duration_big = "90";
-      } else if (durationArr.value === "90-120") {
-        duration_small = "90";
-        duration_big = "120";
-      } else if (durationArr.value === "120-150") {
-        duration_small = "120";
-        duration_big = "150";
-      } else if (durationArr.value === "150") {
-        duration_small = "150";
-        duration_big = "2023";
-      }
-    }
-
-    var countryValArr = [];
-    countryArr?.forEach((element) => {
-      countryValArr.push(element.value);
-    });
-
-    var genreValArr = [];
-    genreArr?.forEach((element) => {
-      genreValArr.push(element.value);
-    });
-
-    var jsonData = {
-      data: [
-        {
-          title: title,
-          year_small: releaseYearFrom ? releaseYearFrom : 0,
-          year_big: releaseYearTo ? releaseYearTo : 2023,
-          platform_netflix: isCheckedNetflix,
-          platform_amazon: isCheckedAmazon,
-          genres: genreArr ? genreValArr : "",
-          type: type, // "0" -> TV Show / "1" -> Movie
-          duration_small: duration_small,
-          duration_big: duration_big,
-          countries: countryArr ? countryValArr : "",
-          directors: director,
-          actors: actor,
-        },
-      ],
-    };
-    const result = await getSearchFilmAction(jsonData);
-    setFilmInfo(result);
-  };
 
   return (
     // <h2>Profile</h2>
     <div className="profileWrapper">
       <h3 className="welcomeText">{`WELCOME! ${uName.toUpperCase()}`}</h3>
       <hr />
+      <button type='button' className="filterButton" onClick={() => setShowModalStatistics(true)} style={{marginBottom: "20px"}} >
+        Statistics
+      </button>
       <br />
 
       <div className="filterPartWrapper">
@@ -870,7 +799,7 @@ const ProfilePage = () => {
                   className="FilmDiv"
                   onClick={() => {
                     setSelected(element);
-                    setShowModal(true);
+                    setShowModalFilm(true);
                   }}
                 >
                   <div className="FilmDivFirstRow2">
@@ -964,7 +893,7 @@ const ProfilePage = () => {
                     className="FilmDiv"
                     onClick={() => {
                       setSelected(element);
-                      setShowModal(true);
+                      setShowModalFilm(true);
                     }}
                   >
                     <div className="FilmDivFirstRow2">
@@ -1041,15 +970,20 @@ const ProfilePage = () => {
                   ) : null}
                 </div>
               ))}
-            <FilmDetailModal
-              show={showModal}
-              modalShow={showModal}
-              selectedFilm={selected}
-              onHide={() => setShowModal(false)}
-            />
           </div>
         </div>
       </div>
+      <FilmDetailModal
+        show={showModalFilm}
+        modalShow={showModalFilm}
+        selectedFilm={selected}
+        onHide={() => setShowModalFilm(false)}
+      />
+      <StatisticsModal 
+        show={showModalStatistics}
+        modalShow={showModalStatistics}
+        onHide={() => setShowModalStatistics(false)}
+      />
     </div>
   );
 };

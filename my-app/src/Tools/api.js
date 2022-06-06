@@ -9,5 +9,6 @@ export default {
     createComment: '/createComment',
     searchFromWatchWishList: '/searchFromWatchWishList',
     getTopShows: '/getTopShows',
+    timePerGenre: '/timePerGenre'
 };
 

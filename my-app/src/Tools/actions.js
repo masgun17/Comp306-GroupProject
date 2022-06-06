@@ -119,6 +119,16 @@ export const loginAction = async (data) => {
     }
   };
 
+  export const timePerGenreAction = async (data) => {
+    try {
+      const result = await services.timePerGenreService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on timePerGenreAction");
+      console.log(error);
+    }
+  };
+  
 
   
   

@@ -715,68 +715,7 @@ def timePerGenre():
     form = form["data"][0]
     Uid = form['Uid']  # int
     try:
-        query = f"""
-            IF OBJECT_ID(N'tempdb..#Temp') IS NOT NULL
-            BEGIN
-            DROP TABLE #Temp
-            END
-            CREATE TABLE #Temp
-            (
-              Listed_In  varchar(255),
-            )
-            
-            IF OBJECT_ID(N'tempdb..#Temp2') IS NOT NULL
-            BEGIN
-            DROP TABLE #Temp2
-            END
-            CREATE TABLE #Temp2
-            (
-                Id bigint IDENTITY(1,1),
-              Listed_In  varchar(255),
-            )
-            
-            
-            INSERT INTO #Temp2
-            SELECT T.Listed_In
-                FROM (
-                    SELECT Listed_In
-                    FROM [Comp306].[dbo].[Shows] WHERE Id IN (select Sid from Watchlist where Uid = 1 and Flag = 0)
-                ) as T
-            
-            
-            DECLARE @i int = 1
-            WHILE @i <= (select top(1) count(*) as c from Watchlist where Uid = 1 and Flag = 0 group by uid)
-            
-            
-            BEGIN
-            DECLARE @StringList AS VARCHAR(1000)= (SELECT Listed_In
-            FROM (
-            SELECT ROW_NUMBER() OVER (ORDER BY Id) AS RowNum, Listed_In
-            FROM #Temp2
-            ) T
-            WHERE RowNum IN (@i))
-            
-            INSERT INTO #Temp
-            SELECT 
-                TRIM(value) 
-            FROM 
-                STRING_SPLIT(@StringList,',')
-            
-            SET @i = @i + 1
-            end
-            
-             select sums.Listed_In, isnull(sum(sums.movie),0) as MovieSum, isnull(sum(sums.tvs),0) as TVSum from (
-             select t.Listed_In  , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'Movie') as int)) as movie
-             , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'TV Show') as int)) as tvs
-             from Users as u 
-             left join Watchlist as w on (u.Id = w.Uid and w.Flag = 0)
-             left join Shows as s on (w.Sid = s.Id), #Temp as t
-             where s.Listed_In like CONCAT('%', t.Listed_In ,'%') and u.Id = {Uid}
-             group by t.Listed_In, s.Duration, s.Type
-             ) as sums
-             group by sums.Listed_In
-        
-                    """
+        query = f"BEGIN SET NOCOUNT ON IF OBJECT_ID(N'tempdb..#Temp') IS NOT NULL BEGIN DROP TABLE #Temp END CREATE TABLE #Temp ( Listed_In  varchar(255), ) IF OBJECT_ID(N'tempdb..#Temp2') IS NOT NULL BEGIN DROP TABLE #Temp2 END CREATE TABLE #Temp2 ( Id bigint IDENTITY(1,1), Listed_In  varchar(255), ) INSERT INTO #Temp2 SELECT T.Listed_In FROM ( SELECT Listed_In FROM [Comp306].[dbo].[Shows] WHERE Id IN (select Sid from Watchlist where Uid = {Uid} and Flag = 0) ) as T DECLARE @i int = 1 WHILE @i <= (select top(1) count(*) as c from Watchlist where Uid = {Uid} and Flag = 0 group by uid) BEGIN DECLARE @StringList AS VARCHAR(1000)= (SELECT Listed_In FROM ( SELECT ROW_NUMBER() OVER (ORDER BY Id) AS RowNum, Listed_In FROM #Temp2 ) T WHERE RowNum IN (@i)) INSERT INTO #Temp SELECT TRIM(value) FROM STRING_SPLIT(@StringList,',') SET @i = @i + 1 end select sums.Listed_In, isnull(sum(sums.movie),0) as MovieSum, isnull(sum(sums.tvs),0) as TVSum from ( select t.Listed_In  , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'Movie') as int)) as movie , ( select cast((SELECT top(1) value FROM STRING_SPLIT(s.Duration, ' ') where s.Type = 'TV Show') as int)) as tvs from Users as u left join Watchlist as w on (u.Id = w.Uid and w.Flag = 0) left join Shows as s on (w.Sid = s.Id), #Temp as t where s.Listed_In like CONCAT('%', t.Listed_In ,'%') and u.Id = {Uid} group by t.Listed_In, s.Duration, s.Type ) as sums group by sums.Listed_In END"
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
             result_code = True
@@ -803,7 +742,7 @@ def getTopShows():
     try:
         conn = connection.cursor()
         data = []
-        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(com.Rating),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(com.Rating) desc"
+        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(Cast(com.Rating as Float)),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(Cast(com.Rating as Float)) desc"
         print(query)
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
