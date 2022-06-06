@@ -386,7 +386,7 @@ def getWatchlistWishlist():
     form = form["data"][0]
     Uid = form['Uid']  # int
     try:
-        query = f"""select u1.Username, STRING_AGG(s1.Title, ', ') as WatchTitles, STRING_AGG(s2.Title, ', ') as WishTitles
+        query = f"""select u1.Username, STRING_AGG(s1.Id, ', ') as WatchIds, STRING_AGG(s2.Id, ', ') as WishIds
                 from Users as u1 left join Watchlist as w1 on (u1.Id = w1.Uid and w1.Flag = 0) left join Shows as s1 on (w1.Sid = s1.Id),
                 Users as u2 left join Watchlist as w2 on (u2.Id = w2.Uid and w2.Flag = 1) left join Shows as s2 on (w2.Sid = s2.Id)
                 where u1.Id = u2.Id and u1.Id = {Uid}
@@ -399,8 +399,8 @@ def getWatchlistWishlist():
             for item in items:
                 line = dict()
                 line["Username"] = item[0]
-                line["Comment"] = item[1]
-                line["Rating"] = item[2]
+                line["WatchIds"] = item[1]
+                line["WishIds"] = item[2]
                 data.append(line)
         print(query)
         print(data)
