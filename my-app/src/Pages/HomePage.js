@@ -103,12 +103,12 @@ const HomePage = () => {
     }
 
     var countryValArr = [];
-    countryArr.forEach(element => {
+    countryArr?.forEach(element => {
       countryValArr.push(element.value);
     });
 
     var genreValArr = [];
-    genreArr.forEach(element => {
+    genreArr?.forEach(element => {
       genreValArr.push(element.value);
     });
     
