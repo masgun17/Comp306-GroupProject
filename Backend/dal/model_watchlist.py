@@ -13,12 +13,12 @@ class Watchlist():
     Sid = Column(BigInteger, primary_key=True, autoincrement=True)
 
     @classmethod
-    def has_item(cls, Sid, Uid):
+    def has_item(cls, Sid, Uid, Flag):
         conn = connection.cursor()
         query_item = None
         result_code = False
         try:
-            query_item = conn.execute(f"select * from Watchlist where Sid = {Sid} and Uid={Uid}").fetchall()[0]
+            query_item = conn.execute(f"select * from Watchlist where Sid = {Sid} and Uid={Uid} and Flag={Flag}").fetchall()[0]
             if query_item is not None:
                 ## item = {"Id": query_item[0][0], "UserId": query_item[0][1], "AddDate": query_item[0][2]}
                 result_code = True
@@ -116,11 +116,11 @@ class Watchlist():
 
     # deletes given item (Sid + Uid) from db
     @classmethod
-    def delete_item(cls, Sid, Uid):
+    def delete_item(cls, Sid, Uid, Flag):
         conn = connection.cursor()
         result_code = False
         try:
-            conn.execute(f"delete from Watchlist where Sid = {Sid} and Uid={Uid}")
+            conn.execute(f"delete from Watchlist where Sid = {Sid} and Uid={Uid} and Flag = {Flag}")
             result_code = True
             conn.commit()
         except Exception as e:

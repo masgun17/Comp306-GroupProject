@@ -296,19 +296,26 @@ def addToList():
     print(form)
     form = form["data"][0]
     print(form)
-    request = []
-    request.append(int(form["uid"]))
-    request.append(int(form["sid"]))
-    request.append(form["flag"])
-
-    result_code = Watchlist.add_item(request)
-    if result_code:
-
-        conn.close()
-        return "Movie added successfully."
+    data = []
+    data.append(int(form["uid"]))
+    data.append(int(form["sid"]))
+    data.append(form["flag"])
+    has = Watchlist.has_item(int(form["sid"]), int(form["uid"]),form["flag"])
+    print(has[0])
+    if has[0]:
+        deleted = Watchlist.delete_item(int(form["sid"]), int(form["uid"]),form["flag"])
+        print(deleted)
+        if deleted:
+            conn.close()
+            return json.dumps("Movie removed from your list")
     else:
-        conn.close()
-        return "Movie is already in your list."
+        result_code = Watchlist.add_item(data)
+        if result_code:
+            conn.close()
+            return json.dumps("Movie added successfully.")
+        else:
+            conn.close()
+            return json.dumps("Movie is already in your list.")
 
 
 @app.route("/getRatingCounts", methods=['POST', 'GET'])
