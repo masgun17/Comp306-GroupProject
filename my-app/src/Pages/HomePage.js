@@ -68,40 +68,50 @@ const HomePage = () => {
   const onSearch = async () => {
     let duration_small="0";
     let duration_big="2023";
-    if(durationArr.value==="1"){
-      duration_small="1";
-      duration_big="1";
-    }else if(durationArr.value==="2-5"){
-      duration_small="2";
-      duration_big="5";
-    }else if(durationArr.value==="5-10"){
-      duration_small="5";
-      duration_big="10";
-    }else if(durationArr.value==="10"){
-      duration_small="10";
-      duration_big="2023";
-    }else if(durationArr.value==="0-30"){
-      duration_small="0";
-      duration_big="30";
-    }else if(durationArr.value==="30-60"){
-      duration_small="30";
-      duration_big="60";
-    }else if(durationArr.value==="60-90"){
-      duration_small="60";
-      duration_big="90";
-    }else if(durationArr.value==="90-120"){
-      duration_small="90";
-      duration_big="120";
-    }else if(durationArr.value==="120-150"){
-      duration_small="120";
-      duration_big="150";
-    }else if(durationArr.value==="150"){
-      duration_small="150";
-      duration_big="2023";
-    }else{
-      duration_small="0";
-      duration_big="2023";
+    if(durationArr) {
+      if(durationArr.value==="1"){
+        duration_small="1";
+        duration_big="1";
+      }else if(durationArr.value==="2-5"){
+        duration_small="2";
+        duration_big="5";
+      }else if(durationArr.value==="5-10"){
+        duration_small="5";
+        duration_big="10";
+      }else if(durationArr.value==="10"){
+        duration_small="10";
+        duration_big="2023";
+      }else if(durationArr.value==="0-30"){
+        duration_small="0";
+        duration_big="30";
+      }else if(durationArr.value==="30-60"){
+        duration_small="30";
+        duration_big="60";
+      }else if(durationArr.value==="60-90"){
+        duration_small="60";
+        duration_big="90";
+      }else if(durationArr.value==="90-120"){
+        duration_small="90";
+        duration_big="120";
+      }else if(durationArr.value==="120-150"){
+        duration_small="120";
+        duration_big="150";
+      }else if(durationArr.value==="150"){
+        duration_small="150";
+        duration_big="2023";
+      }
     }
+
+    var countryValArr = [];
+    countryArr?.forEach(element => {
+      countryValArr.push(element.value);
+    });
+
+    var genreValArr = [];
+    genreArr?.forEach(element => {
+      genreValArr.push(element.value);
+    });
+    
     var jsonData = {
       data: [
         {
@@ -110,11 +120,11 @@ const HomePage = () => {
           year_big: releaseYearTo ? releaseYearTo : 2023,
           platform_netflix: isCheckedNetflix,
           platform_amazon: isCheckedAmazon,
-          genres: genreArr ? genreArr : "",
+          genres: genreArr ? genreValArr : "",
           type: type, // "0" -> TV Show / "1" -> Movie
-          duration_small:duration_small,
-          duration_big:duration_big,  
-          countries: countryArr ? countryArr : "",
+          duration_small: duration_small,
+          duration_big: duration_big,  
+          countries: countryArr ? countryValArr : "",
           directors: director,
           actors: actor,
         },
@@ -123,10 +133,6 @@ const HomePage = () => {
     const result = await getSearchFilmAction(jsonData);
     setFilmInfo(result);
   };
-
-  useEffect(() => {
-    console.log(durationArr)
-  }, [durationArr])
 
   return (
     <div className="HomeLayout">
