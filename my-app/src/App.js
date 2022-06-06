@@ -6,6 +6,7 @@ import ProfilePage from "./Pages/ProfilePage";
 import Signup from "./Pages/Signup";
 
 import 'bootstrap/dist/css/bootstrap.min.css';
+import TopFilms from "./Pages/TopFilms";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/topfilms" element={<TopFilms />} />
 
         </Route>
       </Routes>
