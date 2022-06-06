@@ -8,6 +8,7 @@ const Layout = () => {
     <>
       <nav className="Toolbar">
         <Link className="LayoutButton" to="/">Home</Link>
+        <Link className="LayoutButton" to="/topfilms">Top 20</Link>
         {userLogged === 'true' ? (
         <Link className="LayoutButton" to="/profile">Profil</Link>
         ) : (
