@@ -24,16 +24,52 @@
   min-width: 80vw;
 }
 
+.FilmDivWrapper {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30fr 1fr 1fr;
+  margin: 10px;
+  background-color: wheat;
+}
+
 .FilmDiv {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10px;
   width: 100%;
-  background-color: wheat;
+}
+
+.FilmDivButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  width: 40px;
+  height: 40px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.FilmDivWishlistButton {
+    color: red;
+}
+
+.FilmDivWishlistButton:hover {
+    background-color: rgb(221, 174, 167);
+    border-radius: 50%;
+  }
+
+.FilmDivWatchlistButton:hover {
+  background-color: rgb(112, 207, 207);
+  border-radius: 50%;
+}
+
+.FilmDivWatchlistButton{
+    color: green;
 }
 
 .FilmDivFirstRow {
-    font-size: 20px;
+  font-size: 20px;
 }

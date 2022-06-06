@@ -1,9 +1,16 @@
 import { useState, useContext, useEffect } from "react";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
-import { getGenreOptionsAction, getCountryOptionsAction, getSearchFilmAction } from "../Tools/actions";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  getGenreOptionsAction,
+  getCountryOptionsAction,
+  getSearchFilmAction,
+} from "../Tools/actions";
 import AsyncSelect from "react-select/async";
 import "../Styles/HomePage.css";
+import FilmDetailModal from "./FilmDetailModal";
 
 const HomePage = () => {
   const [title, setTitle] = useState("");
@@ -14,10 +21,27 @@ const HomePage = () => {
   const [releaseYearTo, setReleaseYearTo] = useState();
   const [releaseYearFrom, setReleaseYearFrom] = useState();
   const [type, setType] = useState("0");
-  const [filmInfo, setFilmInfo] = useState(["asdasd", "lajsdnlakd"]);
+  const [filmInfo, setFilmInfo] = useState([
+    {
+      title: "The Grand Seduction",
+      type: "Movie",
+      duration: "113 min",
+      platform: "Netflix",
+      director: "Don McKellar",
+      actor: "Brendan Gleeson, Taylor Kitsch, Gordon Pinsent",
+      year: "2022",
+      genre: "Comedy, Drama",
+      country: "Canada",
+      rating: "+18",
+      description: "A small fishing village must procure a local doctor to secure a lucrative business contract. When unlikely candidate and big city doctor Paul Lewis lands in their lap for a trial residence, the townsfolk rally together to charm him into staying. As the doctor's time in the village winds to a close, acting mayor Murray French has no choice but to pull out all the stops.",
+    }
+    
+  ]);
   const [durationArr, setDurationArr] = useState([]);
   const [genreArr, setGenreArr] = useState();
   const [countryArr, setCountryArr] = useState();
+  const [showModal, setShowModal] = useState(false);
+  const [selected, setSelected] = useState();
   const options = [
     { value: "chocolate", label: "Chocolate" },
     { value: "strawberry", label: "Strawberry" },
@@ -42,7 +66,6 @@ const HomePage = () => {
 
   const [genreOptions, setGenreOptions] = useState([]);
   const [countryOptions, setCountryOptions] = useState([]);
-
 
   const handleOnChangeNetflix = () => {
     setIsCheckedNetflix(!isCheckedNetflix);
@@ -91,7 +114,6 @@ const HomePage = () => {
     const result = await getSearchFilmAction(jsonData);
     setFilmInfo(result);
   };
-
 
   return (
     <div className="HomeLayout">
@@ -293,7 +315,7 @@ const HomePage = () => {
                 components={animatedComponents}
                 isMulti
                 value={countryArr}
-                onChange={e => setCountryArr(e)}
+                onChange={(e) => setCountryArr(e)}
                 options={options}
               />
             </div>
@@ -322,7 +344,7 @@ const HomePage = () => {
                 closeMenuOnSelect={false}
                 components={animatedComponents}
                 value={genreArr}
-                onChange={e => setGenreArr(e)}
+                onChange={(e) => setGenreArr(e)}
                 isMulti
                 options={options}
               />
@@ -349,7 +371,7 @@ const HomePage = () => {
                 components={animatedComponents}
                 isMulti
                 value={durationArr}
-                onChange={e => setDurationArr(e)}
+                onChange={(e) => setDurationArr(e)}
                 options={type === "0" ? seasonDuration : movieDuration}
               />
             </div>
@@ -369,51 +391,85 @@ const HomePage = () => {
       <div className="FilmList">
         {filmInfo &&
           filmInfo.map((element, index) => (
-            <div className="FilmDiv">
-              {/* Title / Type / Duration / Platform ---
+            <div className="FilmDivWrapper">
+              <div
+                className="FilmDiv"
+                onClick={() => {
+                  setSelected(element);
+                  setShowModal(true);
+                }}
+              >
+                {/* Title / Type / Duration / Platform ---
           Director / Actor  ---
           Year / Genre / Country / Rating */}
-              <div className="FilmDivFirstRow">
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Title:</b>
-                Title
-                {element.title}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Type:</b>
-                Type
-                {element.type}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Duration:</b>
-                Duration
-                {element.duration}
+                <div className="FilmDivFirstRow">
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Title:
+                  </b>
+                  {element.title}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Type:
+                  </b>
+                  {element.type}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Duration:
+                  </b>
+                  {element.duration}
+                </div>
+                <div className="FilmDivSecondRow">
+                  {/* Director / Actor */}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Director:
+                  </b>
+                  {element.director}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Actor:
+                  </b>
+                  {element.actor}
+                </div>
+                <div className="FilmDivThirdRow">
+                  {/* Year / Genre / Country / Rating */}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Platform:
+                  </b>
+                  {element.platform}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Year:
+                  </b>
+                  {element.year}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Genre:
+                  </b>
+                  {element.genre}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Country:
+                  </b>
+                  {element.country}
+                  <b style={{ marginLeft: "10px", marginRight: "5px" }}>
+                    Rating:
+                  </b>
+                  {element.rating}
+                </div>
               </div>
-              <div className="FilmDivSecondRow">
-                {/* Director / Actor */}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Director:</b>
-                Director
-                {element.director}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Actor:</b>
-                Actor
-                {element.actor}
+              <div
+                type="button"
+                className="FilmDivButton FilmDivWatchlistButton"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faCheck} />
               </div>
-              <div className="FilmDivThirdRow">
-                {/* Year / Genre / Country / Rating */}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Platform:</b>
-                Platform
-                {element.platform}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Year:</b>
-                Year
-                {element.year}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Genre:</b>
-                Genre
-                {element.genre}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Country:</b>
-                Country
-                {element.country}
-                <b style={{marginLeft: "10px", marginRight: "5px"}}>Rating:</b>
-                Rating
-                {element.rating}
+              <div
+                type="button"
+                className="FilmDivButton FilmDivWishlistButton"
+                onClick={() => {}}
+              >
+                <FontAwesomeIcon icon={faHeart} />
               </div>
             </div>
           ))}
       </div>
+
+      <FilmDetailModal show={showModal} selectedFilm={selected} onHide={() => setShowModal(false)} />
     </div>
   );
 };
