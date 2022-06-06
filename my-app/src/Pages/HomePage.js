@@ -19,15 +19,15 @@ const HomePage = () => {
   const [director, setDirector] = useState("");
   const [isCheckedNetflix, setIsCheckedNetflix] = useState(true);
   const [isCheckedAmazon, setIsCheckedAmazon] = useState(true);
-  const [releaseYearTo, setReleaseYearTo] = useState(2023);
-  const [releaseYearFrom, setReleaseYearFrom] = useState(0);
+  const [releaseYearTo, setReleaseYearTo] = useState();
+  const [releaseYearFrom, setReleaseYearFrom] = useState();
   const [type, setType] = useState("0");
-  const [duration, setDuration] = useState("");
+  // const [duration, setDuration] = useState("");
 
-  const [filmInfo, setFilmInfo] = useState([""]);
-  const [durationArr, setDurationArr] = useState([""]);
-  const [genreArr, setGenreArr] = useState("");
-  const [countryArr, setCountryArr] = useState("");
+  const [filmInfo, setFilmInfo] = useState();
+  const [durationArr, setDurationArr] = useState();
+  const [genreArr, setGenreArr] = useState();
+  const [countryArr, setCountryArr] = useState();
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState("");
   // const options = [
@@ -68,34 +68,34 @@ const HomePage = () => {
   const onSearch = async () => {
     let duration_small="0";
     let duration_big="2023";
-    if(duration==="1"){
+    if(durationArr.value==="1"){
       duration_small="1";
       duration_big="1";
-    }else if(duration==="2-5"){
+    }else if(durationArr.value==="2-5"){
       duration_small="2";
       duration_big="5";
-    }else if(duration==="5-10"){
+    }else if(durationArr.value==="5-10"){
       duration_small="5";
       duration_big="10";
-    }else if(duration==="10"){
+    }else if(durationArr.value==="10"){
       duration_small="10";
       duration_big="2023";
-    }else if(duration==="0-30"){
+    }else if(durationArr.value==="0-30"){
       duration_small="0";
       duration_big="30";
-    }else if(duration==="30-60"){
+    }else if(durationArr.value==="30-60"){
       duration_small="30";
       duration_big="60";
-    }else if(duration==="60-90"){
+    }else if(durationArr.value==="60-90"){
       duration_small="60";
       duration_big="90";
-    }else if(duration==="90-120"){
+    }else if(durationArr.value==="90-120"){
       duration_small="90";
       duration_big="120";
-    }else if(duration==="120-150"){
+    }else if(durationArr.value==="120-150"){
       duration_small="120";
       duration_big="150";
-    }else if(duration==="150"){
+    }else if(durationArr.value==="150"){
       duration_small="150";
       duration_big="2023";
     }else{
@@ -106,15 +106,15 @@ const HomePage = () => {
       data: [
         {
           title: title,
-          year_small: releaseYearFrom,
-          year_big: releaseYearTo,
+          year_small: releaseYearFrom ? releaseYearFrom : 0,
+          year_big: releaseYearTo ? releaseYearTo : 2023,
           platform_netflix: isCheckedNetflix,
           platform_amazon: isCheckedAmazon,
-          genres: genreArr,
+          genres: genreArr ? genreArr : "",
           type: type, // "0" -> TV Show / "1" -> Movie
           duration_small:duration_small,
           duration_big:duration_big,  
-          countries: countryArr,
+          countries: countryArr ? countryArr : "",
           directors: director,
           actors: actor,
         },
@@ -123,6 +123,10 @@ const HomePage = () => {
     const result = await getSearchFilmAction(jsonData);
     setFilmInfo(result);
   };
+
+  useEffect(() => {
+    console.log(durationArr)
+  }, [durationArr])
 
   return (
     <div className="HomeLayout">
