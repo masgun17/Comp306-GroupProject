@@ -209,6 +209,8 @@ const ProfilePage = () => {
         autoClose: 2000,
       });
     }
+    window.location.reload(false);
+
     console.log(result);
   };
 
@@ -239,9 +241,256 @@ const ProfilePage = () => {
         autoClose: 2000,
       });
     }
+    window.location.reload(false);
+
     console.log(result);
   };
 
+  const onFilterWatched = async () => {
+    let duration_small = "0";
+    let duration_big = "2023";
+    if (durationArr) {
+      if (durationArr.value === "1") {
+        duration_small = "1";
+        duration_big = "1";
+      } else if (durationArr.value === "2-5") {
+        duration_small = "2";
+        duration_big = "5";
+      } else if (durationArr.value === "5-10") {
+        duration_small = "5";
+        duration_big = "10";
+      } else if (durationArr.value === "10") {
+        duration_small = "10";
+        duration_big = "2023";
+      } else if (durationArr.value === "0-30") {
+        duration_small = "0";
+        duration_big = "30";
+      } else if (durationArr.value === "30-60") {
+        duration_small = "30";
+        duration_big = "60";
+      } else if (durationArr.value === "60-90") {
+        duration_small = "60";
+        duration_big = "90";
+      } else if (durationArr.value === "90-120") {
+        duration_small = "90";
+        duration_big = "120";
+      } else if (durationArr.value === "120-150") {
+        duration_small = "120";
+        duration_big = "150";
+      } else if (durationArr.value === "150") {
+        duration_small = "150";
+        duration_big = "2023";
+      }
+    }
+
+    var countryValArr = [];
+    countryArr?.forEach((element) => {
+      countryValArr.push(element.value);
+    });
+
+    var genreValArr = [];
+    genreArr?.forEach((element) => {
+      genreValArr.push(element.value);
+    });
+
+    var jsonData = {
+      data: [
+        {
+          title: title,
+          year_small: releaseYearFrom ? releaseYearFrom : 0,
+          year_big: releaseYearTo ? releaseYearTo : 2023,
+          platform_netflix: isCheckedNetflix,
+          platform_amazon: isCheckedAmazon,
+          genres: genreArr ? genreValArr : "",
+          type: type, // "0" -> TV Show / "1" -> Movie
+          duration_small: duration_small,
+          duration_big: duration_big,
+          countries: countryArr ? countryValArr : "",
+          directors: director,
+          actors: actor,
+          flag: 0,
+          uid: uid
+        },
+      ],
+    };
+    const result = await searchFromWatchWishListAction(jsonData);
+    setWatchedListInfo(result);
+  }
+
+  const onFilterWish = async () => {
+    let duration_small = "0";
+    let duration_big = "2023";
+    if (durationArr) {
+      if (durationArr.value === "1") {
+        duration_small = "1";
+        duration_big = "1";
+      } else if (durationArr.value === "2-5") {
+        duration_small = "2";
+        duration_big = "5";
+      } else if (durationArr.value === "5-10") {
+        duration_small = "5";
+        duration_big = "10";
+      } else if (durationArr.value === "10") {
+        duration_small = "10";
+        duration_big = "2023";
+      } else if (durationArr.value === "0-30") {
+        duration_small = "0";
+        duration_big = "30";
+      } else if (durationArr.value === "30-60") {
+        duration_small = "30";
+        duration_big = "60";
+      } else if (durationArr.value === "60-90") {
+        duration_small = "60";
+        duration_big = "90";
+      } else if (durationArr.value === "90-120") {
+        duration_small = "90";
+        duration_big = "120";
+      } else if (durationArr.value === "120-150") {
+        duration_small = "120";
+        duration_big = "150";
+      } else if (durationArr.value === "150") {
+        duration_small = "150";
+        duration_big = "2023";
+      }
+    }
+
+    var countryValArr = [];
+    countryArr?.forEach((element) => {
+      countryValArr.push(element.value);
+    });
+
+    var genreValArr = [];
+    genreArr?.forEach((element) => {
+      genreValArr.push(element.value);
+    });
+
+    var jsonData = {
+      data: [
+        {
+          title: title,
+          year_small: releaseYearFrom ? releaseYearFrom : 0,
+          year_big: releaseYearTo ? releaseYearTo : 2023,
+          platform_netflix: isCheckedNetflix,
+          platform_amazon: isCheckedAmazon,
+          genres: genreArr ? genreValArr : "",
+          type: type, // "0" -> TV Show / "1" -> Movie
+          duration_small: duration_small,
+          duration_big: duration_big,
+          countries: countryArr ? countryValArr : "",
+          directors: director,
+          actors: actor,
+          flag: 1,
+          uid: uid
+        },
+      ],
+    };
+    const result = await searchFromWatchWishListAction(jsonData);
+    setWishlistInfo(result);
+};
+
+    const onFilterBoth =  () => {
+        let duration_small = "0";
+        let duration_big = "2023";
+        if (durationArr) {
+          if (durationArr.value === "1") {
+            duration_small = "1";
+            duration_big = "1";
+          } else if (durationArr.value === "2-5") {
+            duration_small = "2";
+            duration_big = "5";
+          } else if (durationArr.value === "5-10") {
+            duration_small = "5";
+            duration_big = "10";
+          } else if (durationArr.value === "10") {
+            duration_small = "10";
+            duration_big = "2023";
+          } else if (durationArr.value === "0-30") {
+            duration_small = "0";
+            duration_big = "30";
+          } else if (durationArr.value === "30-60") {
+            duration_small = "30";
+            duration_big = "60";
+          } else if (durationArr.value === "60-90") {
+            duration_small = "60";
+            duration_big = "90";
+          } else if (durationArr.value === "90-120") {
+            duration_small = "90";
+            duration_big = "120";
+          } else if (durationArr.value === "120-150") {
+            duration_small = "120";
+            duration_big = "150";
+          } else if (durationArr.value === "150") {
+            duration_small = "150";
+            duration_big = "2023";
+          }
+        }
+    
+        var countryValArr = [];
+        countryArr?.forEach((element) => {
+          countryValArr.push(element.value);
+        });
+    
+        var genreValArr = [];
+        genreArr?.forEach((element) => {
+          genreValArr.push(element.value);
+        });
+        setTimeout(() => {
+          var jsonData1 = {
+            data: [
+              {
+                title: title,
+                year_small: releaseYearFrom ? releaseYearFrom : 0,
+                year_big: releaseYearTo ? releaseYearTo : 2023,
+                platform_netflix: isCheckedNetflix,
+                platform_amazon: isCheckedAmazon,
+                genres: genreArr ? genreValArr : "",
+                type: type, // "0" -> TV Show / "1" -> Movie
+                duration_small: duration_small,
+                duration_big: duration_big,
+                countries: countryArr ? countryValArr : "",
+                directors: director,
+                actors: actor,
+                flag: 0,
+                uid: parseInt(uid),
+              },
+            ],
+          };
+    
+          const result1 = searchFromWatchWishListAction(jsonData1).then((a) =>
+            setWatchedListInfo(a)
+          );
+          console.log(result1);
+    
+          //   setWatchedListInfo(result1);
+        }, 200);
+    
+        setTimeout(() => {
+          var jsonData2 = {
+            data: [
+              {
+                title: title,
+                year_small: releaseYearFrom ? releaseYearFrom : 0,
+                year_big: releaseYearTo ? releaseYearTo : 2023,
+                platform_netflix: isCheckedNetflix,
+                platform_amazon: isCheckedAmazon,
+                genres: genreArr ? genreValArr : "",
+                type: type, // "0" -> TV Show / "1" -> Movie
+                duration_small: duration_small,
+                duration_big: duration_big,
+                countries: countryArr ? countryValArr : "",
+                directors: director,
+                actors: actor,
+                flag: 1,
+                uid: parseInt(uid),
+              },
+            ],
+          };
+          const result2 = searchFromWatchWishListAction(jsonData2).then((r) =>
+            setWishlistInfo(r)
+          );
+          //   setWishlistInfo(result2);
+        }, 500);
+  }
   const onSearch = async () => {
     let duration_small = "0";
     let duration_big = "2023";
@@ -579,7 +828,7 @@ const ProfilePage = () => {
             class="btn btn-primary btn-lg btn-block"
             id="filterWatched"
             style={{ "font-size": 20, "margin-top": "20px" }}
-            onClick={onSearch}
+            onClick={onFilterWatched()}
             className="filterButton"
           >
             Filter your Watched List
@@ -590,7 +839,7 @@ const ProfilePage = () => {
             class="btn btn-primary btn-lg btn-block"
             id="filterWish"
             style={{ "font-size": 20, "margin-top": "20px" }}
-            onClick={onSearch}
+            onClick={onFilterWish()}
             value
             className="filterButton"
           >
@@ -602,7 +851,7 @@ const ProfilePage = () => {
             class="btn btn-primary btn-lg btn-block"
             id="filterBoth"
             style={{ "font-size": 20, "margin-top": "20px" }}
-            onClick={onSearch}
+            onClick={onFilterBoth()}
             className="filterButton"
           >
             Filter Both
@@ -698,6 +947,12 @@ const ProfilePage = () => {
                 ) : null}
               </div>
             ))}
+            <FilmDetailModal
+        show={showModal}
+        modalShow={showModal}
+        selectedFilm={selected}
+        onHide={() => setShowModal(false)}
+      />
         </div>
         <div className="wishlistWrapper">
           <h5>Your Wishlist</h5>
@@ -786,6 +1041,12 @@ const ProfilePage = () => {
                   ) : null}
                 </div>
               ))}
+              <FilmDetailModal
+        show={showModal}
+        modalShow={showModal}
+        selectedFilm={selected}
+        onHide={() => setShowModal(false)}
+      />
           </div>
         </div>
       </div>
