@@ -69,6 +69,16 @@ export const loginAction = async (data) => {
     }
   }
 
+  export const getRatingCountsAction = async (data) =>{
+    try {
+      const result = await services.getRatingCountsService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on getRatingCountsAction");
+      console.log(error);
+    }
+  }
+
   export const addToListAction = async (data) =>{
     try {
       const result = await services.addToListService(data);
@@ -79,4 +89,6 @@ export const loginAction = async (data) => {
     }
   }
 
+
+  
   

@@ -41,6 +41,11 @@ export const signupService = async (data) =>
     axios.post(API.addToList, data).then(resolve).catch(reject);
   })
   
+  export const getRatingCountsService = async (data) => 
+  new Promise((resolve, reject) => {
+    axios.post(API.getRatingCounts, data).then(resolve).catch(reject);
+  })
+  
   
 
 
