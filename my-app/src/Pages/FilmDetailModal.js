@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import "../Styles/FilmDetailModal.css";
+import { getCommentsAction } from "../Tools/actions";
 
 export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
   const [selected, setSelected] = useState();
-  // const [commentArr, setCommentArr] = useState([]);
+  const [commentArr, setCommentArr] = useState([]);
 
   useEffect(() => {
     setSelected(selectedFilm);
+    // var jsonData = {
+    //   data: [
+    //     {
+    //       id: selectedFilm.id
+    //     },
+    //   ],
+    // };
+    // const a = await getCommentsAction(jsonData);
   }, [selectedFilm]);
 
   return (
@@ -55,6 +64,9 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
                 </div>
                 <div className="CommentSection">
                   <h5>Comments</h5>
+                  {commentArr && commentArr.map((element, index) => <div>
+                    kajsdkjasnd
+                  </div>)}
                 </div>
               </div>
             </Modal.Body>

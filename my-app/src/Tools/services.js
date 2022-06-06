@@ -31,6 +31,12 @@ export const signupService = async (data) =>
     axios.post(API.searchFilm, data).then(resolve).catch(reject);
   })
 
+  export const getCommentsService = async (data) => 
+  new Promise((resolve, reject) => {
+    axios.post(API.getComments, data).then(resolve).catch(reject);
+  })
+  
+
 
 
 

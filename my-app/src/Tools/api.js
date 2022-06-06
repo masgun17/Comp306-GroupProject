@@ -5,5 +5,6 @@ export default {
     getGenreOptions: '/getGenreOptions',
     getCountryOptions: '/getCountryOptions',
     searchFilm: '/searchFilm',
+    getComments: '/getComments',
 };
 

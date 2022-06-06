@@ -59,3 +59,13 @@ export const loginAction = async (data) => {
     }
   }
 
+  export const getCommentsAction = async (data) =>{
+    try {
+      const result = await services.getCommentsService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on getCommentsAction");
+      console.log(error);
+    }
+  }
+  
