@@ -297,7 +297,7 @@ def getRatingCounts():
     form = form["data"][0]
     Sid = form['Sid'] # int
     try:
-        query = f"select c.Rating, count(*) as rating_count from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid} group by c.Rating order by c.Rating asc"
+        query = f"select c.Rating, count(*) as rating_count from Comments as c where c.Sid = {Sid} group by c.Rating order by c.Rating asc"
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
             result_code = True
@@ -316,6 +316,37 @@ def getRatingCounts():
         conn.close()
         return data
 
+
+
+@app.route("/getComments", methods=['POST', 'GET'])
+def getComments():
+    conn = connection.cursor()
+    items = []
+    result_code = False
+    data = []
+    form = json.loads(request.data)
+    form = form["data"][0]
+    Sid = form['Sid']  # int
+    try:
+        query = f"select u.Username, c.Comment, c.Rating from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid}"
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+        if result_code:
+            for item in items:
+                line = dict()
+                line["Username"] = item[0]
+                line["Comment"] = item[1]
+                line["Rating"] = item[2]
+        print(query)
+        data.append(line)
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
 
 
 app.run()
