@@ -286,4 +286,36 @@ def searchFilm():
         return data
 
 
+
+@app.route("/getRatingCounts", methods=['POST', 'GET'])
+def getRatingCounts():
+    conn = connection.cursor()
+    items = []
+    result_code = False
+    data = []
+    form = json.loads(request.data)
+    form = form["data"][0]
+    Sid = form['Sid'] # int
+    try:
+        query = f"select c.Rating, count(*) as rating_count from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid} group by c.Rating order by c.Rating asc"
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+        if result_code:
+            for item in items:
+                line = dict()
+                line["rating"] = item[0]
+                line["rating_count"] = item[1]
+        print(query)
+        data.append(line)
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
+
+
+
 app.run()
