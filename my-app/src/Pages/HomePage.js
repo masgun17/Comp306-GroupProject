@@ -22,6 +22,8 @@ const HomePage = () => {
   const [releaseYearTo, setReleaseYearTo] = useState();
   const [releaseYearFrom, setReleaseYearFrom] = useState();
   const [type, setType] = useState("0");
+  const [duration, setDuration] = useState("");
+
   const [filmInfo, setFilmInfo] = useState([
     {
       title: "The Grand Seduction",
@@ -79,20 +81,57 @@ const HomePage = () => {
   const animatedComponents = makeAnimated();
 
   const onSearch = async () => {
+    let duration_small="0";
+    let duration_big="2023";
+    if(duration==="1"){
+      duration_small="1";
+      duration_big="1";
+    }else if(duration==="2-5"){
+      duration_small="2";
+      duration_big="5";
+    }else if(duration==="5-10"){
+      duration_small="5";
+      duration_big="10";
+    }else if(duration==="10"){
+      duration_small="10";
+      duration_big="2023";
+    }else if(duration==="0-30"){
+      duration_small="0";
+      duration_big="30";
+    }else if(duration==="30-60"){
+      duration_small="30";
+      duration_big="60";
+    }else if(duration==="60-90"){
+      duration_small="60";
+      duration_big="90";
+    }else if(duration==="90-120"){
+      duration_small="90";
+      duration_big="120";
+    }else if(duration==="120-150"){
+      duration_small="120";
+      duration_big="150";
+    }else if(duration==="150"){
+      duration_small="150";
+      duration_big="2023";
+    }else{
+      duration_small="0";
+      duration_big="2023";
+    }
     var jsonData = {
       data: [
         {
-          Title: title,
-          Type: type, // "0" -> TV Show / "1" -> Movie
-          Duration: durationArr,
-          PlatformNetflix: isCheckedNetflix,
-          PlatformAmazon: isCheckedAmazon,
-          Director: director,
-          Actor: actor,
-          YearFrom: releaseYearFrom,
-          YearTo: releaseYearTo,
-          Genre: genreArr,
-          Country: countryArr,
+          title: title,
+          year_small: releaseYearFrom,
+          year_big: releaseYearTo,
+          platform_netflix: isCheckedNetflix,
+          platform_amazon: isCheckedAmazon,
+          genres: genreArr,
+          type: type, // "0" -> TV Show / "1" -> Movie
+          duration_small:duration_small,
+          duration_big:duration_big,  
+          countries: countryArr,
+          directors: director,
+          actors: actor,
         },
       ],
     };
@@ -139,6 +178,7 @@ const HomePage = () => {
               type="text"
               name="actor"
               id="actor"
+              placeholder="Use comma to separate actors' names"
               style={{ "font-size": 20 }}
               value={actor}
               onChange={(e) => setActor(e.target.value)}
@@ -155,6 +195,7 @@ const HomePage = () => {
               type="text"
               name="director"
               id="director"
+              placeholder="Use comma to separate directors' names"
               style={{ "font-size": 20 }}
               value={director}
               onChange={(e) => setDirector(e.target.value)}
@@ -347,7 +388,6 @@ const HomePage = () => {
                 style={{ width: "10%", "margin-left": "10px" }}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
-                isMulti
                 value={durationArr}
                 onChange={(e) => setDurationArr(e)}
                 options={type === "0" ? seasonDuration : movieDuration}
