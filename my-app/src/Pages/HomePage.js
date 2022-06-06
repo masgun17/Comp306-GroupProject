@@ -24,7 +24,7 @@ const HomePage = () => {
   const [type, setType] = useState("0");
   // const [duration, setDuration] = useState("");
 
-  const [filmInfo, setFilmInfo] = useState();
+  const [filmInfo, setFilmInfo] = useState("first");
   const [durationArr, setDurationArr] = useState();
   const [genreArr, setGenreArr] = useState();
   const [countryArr, setCountryArr] = useState();
@@ -406,8 +406,10 @@ const HomePage = () => {
           Search
         </button>
       </div>
-
-      <div className="FilmList">
+      
+      {filmInfo === "first" && <div></div>}
+      {filmInfo !== "first" && <div className="FilmList">
+        {filmInfo && filmInfo.length === 0 && <div>No result</div>}
         {filmInfo &&
           filmInfo.map((element, index) => (
             <div className="FilmDivWrapper">
@@ -486,7 +488,8 @@ const HomePage = () => {
               </div>
             </div>
           ))}
-      </div>
+      </div>}
+      
 
       <FilmDetailModal
         show={showModal}
