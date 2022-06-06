@@ -7,6 +7,7 @@ import {
   getGenreOptionsAction,
   getCountryOptionsAction,
   getSearchFilmAction,
+  addToListAction,
 } from "../Tools/actions";
 import AsyncSelect from "react-select/async";
 import "../Styles/HomePage.css";
@@ -14,6 +15,9 @@ import FilmDetailModal from "./FilmDetailModal";
 import { countries, genres } from "../Tools/constants.js";
 
 const HomePage = () => {
+  let userLogged = sessionStorage.getItem('isLogin');
+  let uid = sessionStorage.getItem('uid');
+
   const [title, setTitle] = useState("");
   const [actor, setActor] = useState("");
   const [director, setDirector] = useState("");
@@ -64,6 +68,36 @@ const HomePage = () => {
   };
 
   const animatedComponents = makeAnimated();
+  
+  const addToWishList = async (sid,uid) =>{
+    var jsonData = {
+      data: [
+        {
+          sid: sid,
+          uid: uid,
+          flag: 1,
+          
+        },
+      ],
+    };
+    const result = await addToListAction(jsonData);
+
+  }
+
+  const addToWatchList = async (sid,uid) =>{
+    var jsonData = {
+      data: [
+        {
+          sid: sid,
+          uid: uid,
+          flag: 0,
+          
+        },
+      ],
+    };
+    const result = await addToListAction(jsonData);
+    
+  }
 
   const onSearch = async () => {
     let duration_small = "0";
@@ -472,20 +506,26 @@ const HomePage = () => {
                   {element.rating}
                 </div>
               </div>
+              {userLogged === 'true' ? (
+                <>
               <div
                 type="button"
                 className="FilmDivButton FilmDivWatchlistButton"
-                onClick={() => {}}
+                onClick={() => {addToWatchList(element.id, uid )}}
               >
                 <FontAwesomeIcon icon={faCheck} />
               </div>
               <div
                 type="button"
                 className="FilmDivButton FilmDivWishlistButton"
-                onClick={() => {}}
+                onClick={() => {addToWishList(element.id, uid )}}
               >
                 <FontAwesomeIcon icon={faHeart} />
               </div>
+              </>
+              ):(
+                null
+              )}
             </div>
           ))}
       </div>}

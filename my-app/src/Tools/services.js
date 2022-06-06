@@ -35,6 +35,12 @@ export const signupService = async (data) =>
   new Promise((resolve, reject) => {
     axios.post(API.getComments, data).then(resolve).catch(reject);
   })
+
+  export const addToListService = async (data) => 
+  new Promise((resolve, reject) => {
+    axios.post(API.addToList, data).then(resolve).catch(reject);
+  })
+  
   
 
 

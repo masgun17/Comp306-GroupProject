@@ -6,5 +6,6 @@ export default {
     // getCountryOptions: '/getCountryOptions',
     searchFilm: '/searchFilm',
     getComments: '/getComments',
+    addToList: '/addToList',
 };
 

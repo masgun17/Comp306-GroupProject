@@ -13,9 +13,11 @@ from sqlalchemy import create_engine, text
 import pyodbc
 import pandas as pd
 from dal.model_shows import Shows
+from dal.model_watchlist import Watchlist
 from dal import hashingPassword
 import codecs
 from dal.model_users import Users
+from flask import request
 app = Flask("comp306")
 
 ## response = requests.get('https://httpbin.org/ip')
@@ -285,6 +287,27 @@ def searchFilm():
         conn.close()
         return data
 
+@app.route("/addToList",   methods=['POST', 'GET']) 
+def addToList():
+    conn = connection.cursor()
+    print(request)
+    form = json.loads(request.data)
+    print(form)
+    form = form["data"][0]
+    print(form)
+    request = []
+    request.append(int(form["uid"]))
+    request.append(int(form["sid"]))
+    request.append(form["flag"])
+
+    result_code = Watchlist.add_item(request)
+    if result_code:
+
+        conn.close()
+        return "Movie added successfully."
+    else:
+        conn.close()
+        return "Movie is already in your list."
 
 
 @app.route("/getRatingCounts", methods=['POST', 'GET'])

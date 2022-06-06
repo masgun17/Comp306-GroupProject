@@ -20,8 +20,10 @@ const Login = () => {
           }]
         }
         const a = await loginAction(jsonData);
-                    sessionStorage.setItem('isLogin', 'true')
+            sessionStorage.setItem('isLogin', 'true')
             sessionStorage.setItem('username', a["Username"])
+            sessionStorage.setItem('uid', a["Id"])
+
             navigate("/");
             window.location.reload(false);
         // if(a["Login"]){

@@ -68,4 +68,15 @@ export const loginAction = async (data) => {
       console.log(error);
     }
   }
+
+  export const addToListAction = async (data) =>{
+    try {
+      const result = await services.addToListService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on addToListAction");
+      console.log(error);
+    }
+  }
+
   

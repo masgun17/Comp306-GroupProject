@@ -91,15 +91,17 @@ class Watchlist():
     def add_item(cls, Watchlist_item):
         conn = connection.cursor()
         result_code = False
-        if Watchlist_item is not None and len(Watchlist_item)==2:
+        if Watchlist_item is not None and len(Watchlist_item)==3:
             try:
                 conn.execute(f"""
                     insert into Watchlist
                        ([Uid],
-                       [Sid])
+                       [Sid],
+                       [Flag])
                     values
                        ({Watchlist_item[0]}
-                       ,{Watchlist_item[1]})""")
+                       ,{Watchlist_item[1]}
+                       ,{Watchlist_item[2]})""")
                 result_code = True
                 conn.commit()
             except Exception as e:

@@ -17,6 +17,8 @@ const Layout = () => {
           <button class="btn btn-primary" style={{ "font-size": "30px" }} onClick={() => {
             sessionStorage.setItem('username', '');
             sessionStorage.setItem('isLogin', 'false');
+            sessionStorage.setItem('uid', '');
+
             window.location.reload(false);
           }}><Link to="/">Logout</Link></button>
 
