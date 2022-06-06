@@ -11,6 +11,7 @@ import {
 import AsyncSelect from "react-select/async";
 import "../Styles/HomePage.css";
 import FilmDetailModal from "./FilmDetailModal";
+import { countries, genres } from '../Tools/constants.js';
 
 const HomePage = () => {
   const [title, setTitle] = useState("");
@@ -42,11 +43,11 @@ const HomePage = () => {
   const [countryArr, setCountryArr] = useState();
   const [showModal, setShowModal] = useState(false);
   const [selected, setSelected] = useState();
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  // const options = [
+  //   { value: "chocolate", label: "Chocolate" },
+  //   { value: "strawberry", label: "Strawberry" },
+  //   { value: "vanilla", label: "Vanilla" },
+  // ];
 
   const seasonDuration = [
     { value: "1", label: "1 season" },
@@ -64,8 +65,8 @@ const HomePage = () => {
     { value: "150", label: "+150 mins" },
   ];
 
-  const [genreOptions, setGenreOptions] = useState([]);
-  const [countryOptions, setCountryOptions] = useState([]);
+  // const [genreOptions, setGenreOptions] = useState([]);
+  // const [countryOptions, setCountryOptions] = useState([]);
 
   const handleOnChangeNetflix = () => {
     setIsCheckedNetflix(!isCheckedNetflix);
@@ -76,22 +77,6 @@ const HomePage = () => {
   };
 
   const animatedComponents = makeAnimated();
-
-  const getCountries = async () => {
-    let result = await getGenreOptionsAction();
-    console.log(result);
-    setGenreOptions(result);
-  };
-
-  // useEffect(async () => {
-  //   const a = await getCountryOptionsAction();
-  //   setCountryOptions(a);
-  // }, []);
-
-  // useEffect(async () => {
-  //   const a = await getGenreOptionsAction();
-  // setGenreOptions(a);
-  // }, []);
 
   const onSearch = async () => {
     var jsonData = {
@@ -298,13 +283,6 @@ const HomePage = () => {
                 "margin-left": "10px",
               }}
             >
-              {/* <AsyncSelect
-                style={{ "width": "10%", "margin-left": "10px" }}
-                isMulti
-                cacheOptions
-                defaultOptions
-                loadOptions={genreOptions}
-              /> */}
               <Select
                 style={{
                   width: "10%",
@@ -316,7 +294,7 @@ const HomePage = () => {
                 isMulti
                 value={countryArr}
                 onChange={(e) => setCountryArr(e)}
-                options={options}
+                options={countries}
               />
             </div>
 
@@ -343,10 +321,10 @@ const HomePage = () => {
                 }}
                 closeMenuOnSelect={false}
                 components={animatedComponents}
+                isMulti
                 value={genreArr}
                 onChange={(e) => setGenreArr(e)}
-                isMulti
-                options={options}
+                options={genres}
               />
             </div>
 

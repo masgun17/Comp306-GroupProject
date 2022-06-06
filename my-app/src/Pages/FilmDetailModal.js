@@ -16,7 +16,8 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
     //     },
     //   ],
     // };
-    // const a = await getCommentsAction(jsonData);
+    // const resultComment = await getCommentsAction(jsonData);
+    // setCommentArr(resultComment);
   }, [selectedFilm]);
 
   return (
@@ -62,7 +63,7 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
                   <strong>Rating: </strong> {selectedFilm.rating}
                   <br />
                 </div>
-                <div className="CommentSection">
+                <div className="CommentSection" style={{overflowY: 'visible'}}>
                   <h5>Comments</h5>
                   {commentArr && commentArr.map((element, index) => <div>
                     kajsdkjasnd

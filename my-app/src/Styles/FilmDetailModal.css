@@ -31,13 +31,12 @@
 
 .modal-footer {
   display:grid !important;
-  height: inherit;
+  height: fit-content;
   grid-template-columns: 3fr 7fr;
   align-items: unset !important;
 }
 
 .CommentSection{
-  border-left: 1px solid rgb(243, 136, 136);
   display: flex;
   padding-left: 15px;
   /* align-items: center; */
@@ -46,5 +45,5 @@
 }
 
 .FilmInfo {
-  
+  border-right: 1px solid rgb(243, 136, 136);
 }

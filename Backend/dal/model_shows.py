@@ -229,7 +229,7 @@ WHERE RowNum IN (@i))
 
 INSERT INTO #Temp
 SELECT 
-    value 
+    TRIM(value)
 FROM 
     STRING_SPLIT(@StringList,',')
 

@@ -16,15 +16,15 @@ export const signupService = async (data) =>
     axios.post(API.login, data).then(resolve).catch(reject);
   });
 
-  export const getGenreOptionsService = async () =>
-  new Promise((resolve, reject) => {
-    axios.post(API.getGenreOptions).then(resolve).catch(reject);
-  });
+  // export const getGenreOptionsService = async () =>
+  // new Promise((resolve, reject) => {
+  //   axios.post(API.getGenreOptions).then(resolve).catch(reject);
+  // });
 
-  export const getCountryOptionsService = async () =>
-  new Promise((resolve, reject) => {
-    axios.post(API.getCountryOptions).then(resolve).catch(reject);
-  });
+  // export const getCountryOptionsService = async () =>
+  // new Promise((resolve, reject) => {
+  //   axios.post(API.getCountryOptions).then(resolve).catch(reject);
+  // });
 
   export const getSearchFilmService = async (data) => 
   new Promise((resolve, reject) => {
