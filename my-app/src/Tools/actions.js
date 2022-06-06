@@ -99,6 +99,16 @@ export const loginAction = async (data) => {
     }
   }
   
+  export const searchFromWatchWishListAction = async (data) =>{
+    try {
+      const result = await services.searchFromWatchWishListService(data);
+      return result.data;
+    } catch (error) {
+      console.log("Error on searchFromWatchWishListAction");
+      console.log(error);
+    }
+  }
+
 
   
   

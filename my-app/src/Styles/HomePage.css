@@ -31,7 +31,18 @@
   margin: 10px;
   background-color: wheat;
 }
+.FilmDivWrapper2{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 30fr 1fr 1fr;
+  margin: 10px;
+  background-color: wheat;
+  font-size: 12px !important;
+}
+.FilmDivFirstRow2{
+  font-size: 12px !important;
 
+}
 .FilmDiv {
   display: flex;
   flex-direction: column;

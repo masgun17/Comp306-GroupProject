@@ -1,14 +1,14 @@
 import "../Styles/Login.css";
 import { useState, useContext } from 'react';
 import { signupAction } from "../Tools/actions";
-// import {toast} from 'react-toastify';
+import {toast} from 'react-toastify';
 import { useNavigate } from "react-router-dom";
-// import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
     const [username, setUsername] = useState(0);
     const [password, setPassword] = useState(0);
-    // toast.configure();
+    toast.configure();
     const navigate = useNavigate();
     async function signupForm(username, password) {
         var jsonData = {
@@ -20,23 +20,23 @@ const Signup = () => {
 
         const a = await signupAction(jsonData);
         console.log(a);
-        // if(a==='User added Successfully'){
-        //     toast.success('User added Successfully',
-        // {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-        // navigate("../Login");
-        // }else if(a==="Please Enter Your Username"){
-        //     toast.warning('Please Enter Your Username',
-        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-        //  }else if(a==="Specify a password"){
-        //     toast.warning('Specify a password',
-        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-        // }else if(a==="Your password's length should be at least 8 characters."){
-        //     toast.warning('Your password\'s length should be at least 8 characters.',
-        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-        // }else{
-        //     toast.warning('This username is already in use!',
-        //     {position: toast.POSITION.TOP_CENTER, autoClose:2000})
-        // }
+        if(a==='User added Successfully'){
+            toast.success('User added Successfully',
+        {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        navigate("../Login");
+        }else if(a==="Please Enter Your Username"){
+            toast.warning('Please Enter Your Username',
+            {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+         }else if(a==="Specify a password"){
+            toast.warning('Specify a password',
+            {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        }else if(a==="Your password's length should be at least 8 characters."){
+            toast.warning('Your password\'s length should be at least 8 characters.',
+            {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        }else{
+            toast.warning('This username is already in use!',
+            {position: toast.POSITION.TOP_CENTER, autoClose:2000})
+        }
     }
     return (
         // <h1>Disease Information Page</h1>

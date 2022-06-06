@@ -7,5 +7,6 @@ export default {
     getRatingCounts: '/getRatingCounts',
     addToList: '/addToList',
     createComment: '/createComment',
+    searchFromWatchWishList: '/searchFromWatchWishList'
 };
 
