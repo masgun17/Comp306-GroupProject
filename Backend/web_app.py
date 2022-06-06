@@ -328,8 +328,10 @@ def getComments():
     form = json.loads(request.data)
     form = form["data"][0]
     Sid = form['Sid']  # int
+    rating_small = form['rating_small']  # int
+    rating_big = form['rating_big']  # int
     try:
-        query = f"select u.Username, c.Comment, c.Rating from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid}"
+        query = f"select u.Username, c.Comment, c.Rating from Comments as c left join Users as u on (u.Id = c.Uid) where c.Sid = {Sid} and c.Rating >= {rating_small} and c.Rating <= {rating_big}"
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
             result_code = True
@@ -342,6 +344,42 @@ def getComments():
                 data.append(line)
         print(query)
         
+        print(data)
+    except Exception as e:
+        print(e)
+    finally:
+        return json.dumps(data)
+        conn.close()
+        return data
+
+
+@app.route("/getWatchlistWishlist", methods=['POST', 'GET'])
+def getWatchlistWishlist():
+    conn = connection.cursor()
+    items = []
+    result_code = False
+    data = []
+    form = json.loads(request.data)
+    form = form["data"][0]
+    Uid = form['Uid']  # int
+    try:
+        query = f"""select u1.Username, STRING_AGG(s1.Title, ', ') as WatchTitles, STRING_AGG(s2.Title, ', ') as WishTitles
+                from Users as u1 left join Watchlist as w1 on (u1.Id = w1.Uid and w1.Flag = 0) left join Shows as s1 on (w1.Sid = s1.Id),
+                Users as u2 left join Watchlist as w2 on (u2.Id = w2.Uid and w2.Flag = 1) left join Shows as s2 on (w2.Sid = s2.Id)
+                where u1.Id = u2.Id and u1.Id = {Uid}
+                group by u1.Id , u1.Username
+                """
+        items = conn.execute(query).fetchall()
+        if items is not None and len(items) > 0:
+            result_code = True
+        if result_code:
+            for item in items:
+                line = dict()
+                line["Username"] = item[0]
+                line["Comment"] = item[1]
+                line["Rating"] = item[2]
+                data.append(line)
+        print(query)
         print(data)
     except Exception as e:
         print(e)
