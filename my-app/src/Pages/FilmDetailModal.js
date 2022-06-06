@@ -3,9 +3,16 @@ import { Modal } from "react-bootstrap";
 import "../Styles/FilmDetailModal.css";
 import { getCommentsAction } from "../Tools/actions";
 
-export default function FilmDetailModal({ selectedFilm, modalShow, onHide, ...props }) {
+export default function FilmDetailModal({
+  selectedFilm,
+  modalShow,
+  onHide,
+  ...props
+}) {
   const [selected, setSelected] = useState(selectedFilm);
   const [commentArr, setCommentArr] = useState([]);
+  const [smallRating, setSmallRating] = useState(0);
+  const [bigRating, setBigRating] = useState(5);
 
   useEffect(() => {
     setSelected(selectedFilm);
@@ -18,17 +25,15 @@ export default function FilmDetailModal({ selectedFilm, modalShow, onHide, ...pr
           data: [
             {
               Sid: selectedFilm.id,
+              rating_small: smallRating,
+              rating_big: bigRating,
             },
           ],
         };
-        const resultComment = getCommentsAction(jsonData).then(
-          (onResolved) => {
-            setCommentArr(onResolved);
-          });
-
+        const resultComment = getCommentsAction(jsonData).then((onResolved) => {
+          setCommentArr(onResolved);
+        });
       }, 100);
-
-      
     }
   }, [modalShow]);
 
@@ -36,17 +41,16 @@ export default function FilmDetailModal({ selectedFilm, modalShow, onHide, ...pr
     <div className="FilmDetailModalWrapper">
       <Modal
         {...props}
-        size="md"
+        // size="md"
         aria-labelledby="contained-modal-title-vcenter"
         contentClassName="modal-content"
         dialogClassName="modal-dialog"
         centered
         onHide={onHide}
       >
-        {/* {console.log(selected)}
-        {console.log(selectedFilm)} */}
+
         {selected && (
-          <>
+          <div className="modal-wrapper" style={{overflowY: "auto"}}>
             <div className="modal-title">
               <div className="alignCenter">
                 <h1>
@@ -79,15 +83,23 @@ export default function FilmDetailModal({ selectedFilm, modalShow, onHide, ...pr
                 </div>
                 <div
                   className="CommentSection"
-                  style={{ overflowY: "visible" }}
+                  // style={{ overflowY: "visible" }}
                 >
                   <h5>Comments</h5>
                   {commentArr &&
-                    commentArr.map((element, index) => <div>kajsdkjasnd</div>)}
+                    commentArr.map((element, index) => (
+                      <div className="IndividualComment">
+                        {element.Username}
+                        <div className="CommentRatingRow">
+                          <div>{element.Comment}</div>
+                          <div>{element.Rating}</div>
+                        </div>
+                      </div>
+                    ))}
                 </div>
               </div>
             </Modal.Body>
-          </>
+          </div>
         )}
       </Modal>
     </div>
