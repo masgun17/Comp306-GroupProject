@@ -803,7 +803,8 @@ def getTopShows():
     try:
         conn = connection.cursor()
         data = []
-        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(com.Rating),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(com.Rating) desc"
+        query = "select top(20) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names, isnull(AVG(cast(com.Rating) as float),0) as average from Shows as s_out left join  Comments as com on (com.Sid = s_out.Id) left join Cast as c on (s_out.Id = c.Sid) left join Directs as d on (d.Sid = s_out.Id) left join People as pc on (c.Pid = pc.Id) left join People as pd on (d.Pid = pd.Id) group by com.Sid, s_out.Id, s_out.Country, s_out.Date_Added, s_out.Description, s_out.Duration, s_out.Listed_In, s_out.Platform, s_out.Rating, s_out.Release_Year, s_out.Title, s_out.Type order by AVG(cast(com.Rating) as float) desc"
+
         print(query)
         items = conn.execute(query).fetchall()
         if items is not None and len(items) > 0:
