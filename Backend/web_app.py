@@ -129,7 +129,7 @@ def searchFilm():
     directors = form['directors'] # string array
     actors = form['actors'] # string
 
-    query = "select s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names from ( select * from Shows as s where "
+    query = "select top(100) s_out.*, STRING_AGG(pc.Name, ', ') as cast_names, STRING_AGG( pd.Name, ', ') as directors_names from ( select * from Shows as s where "
 
     try:
         if title is not None and len(title) > 0:
