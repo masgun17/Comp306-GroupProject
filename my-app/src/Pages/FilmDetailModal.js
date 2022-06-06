@@ -3,25 +3,34 @@ import { Modal } from "react-bootstrap";
 import "../Styles/FilmDetailModal.css";
 import { getCommentsAction } from "../Tools/actions";
 
-export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
-  const [selected, setSelected] = useState();
+export default function FilmDetailModal({ selectedFilm, modalShow, onHide, ...props }) {
+  const [selected, setSelected] = useState(selectedFilm);
   const [commentArr, setCommentArr] = useState([]);
 
   useEffect(() => {
-    if (selectedFilm) {
-      setSelected(selectedFilm);
-      var jsonData = {
-        data: [
-          {
-            Sid: selectedFilm.id
-          },
-        ],
-      };
-      const resultComment = getCommentsAction(jsonData);
-      setCommentArr(resultComment);
-    }
-    
+    setSelected(selectedFilm);
   }, [selectedFilm]);
+
+  useEffect(() => {
+    if (selectedFilm) {
+      setTimeout(() => {
+        var jsonData = {
+          data: [
+            {
+              Sid: selectedFilm.id,
+            },
+          ],
+        };
+        const resultComment = getCommentsAction(jsonData).then(
+          (onResolved) => {
+            setCommentArr(onResolved);
+          });
+
+      }, 100);
+
+      
+    }
+  }, [modalShow]);
 
   return (
     <div className="FilmDetailModalWrapper">
@@ -34,43 +43,47 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
         centered
         onHide={onHide}
       >
+        {/* {console.log(selected)}
+        {console.log(selectedFilm)} */}
         {selected && (
           <>
             <div className="modal-title">
               <div className="alignCenter">
                 <h1>
-                  <strong>{selected.title}</strong>
+                  <strong>{selectedFilm.title}</strong>
                 </h1>
-                <h4>{selected.director}</h4>
-                <h5>{selected.actor}</h5>
+                <h4>{selectedFilm.director}</h4>
+                <h5>{selectedFilm.actor}</h5>
               </div>
             </div>
 
             <Modal.Body>
-              <div className="modal-body">{selected.description}</div>
+              <div className="modal-body">{selectedFilm.description}</div>
 
               <div className="modal-footer">
                 <div className="FilmInfo">
-                  <strong>Type: </strong> {selected.type}
+                  <strong>Type: </strong> {selectedFilm.type}
                   <br />
-                  <strong>Duration: </strong> {selected.duration}
+                  <strong>Duration: </strong> {selectedFilm.duration}
                   <br />
-                  <strong>Year: </strong> {selected.year}
+                  <strong>Year: </strong> {selectedFilm.year}
                   <br />
-                  <strong>Genre: </strong> {selected.genre}
+                  <strong>Genre: </strong> {selectedFilm.genre}
                   <br />
-                  <strong>Country: </strong> {selected.country}
+                  <strong>Country: </strong> {selectedFilm.country}
                   <br />
-                  <strong>Platform: </strong> {selected.platform}
+                  <strong>Platform: </strong> {selectedFilm.platform}
                   <br />
-                  <strong>Rating: </strong> {selected.rating}
+                  <strong>Rating: </strong> {selectedFilm.rating}
                   <br />
                 </div>
-                <div className="CommentSection" style={{overflowY: 'visible'}}>
+                <div
+                  className="CommentSection"
+                  style={{ overflowY: "visible" }}
+                >
                   <h5>Comments</h5>
-                  {commentArr && commentArr.map((element, index) => <div>
-                    kajsdkjasnd
-                  </div>)}
+                  {commentArr &&
+                    commentArr.map((element, index) => <div>kajsdkjasnd</div>)}
                 </div>
               </div>
             </Modal.Body>

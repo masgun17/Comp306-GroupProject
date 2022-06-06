@@ -493,6 +493,7 @@ const HomePage = () => {
 
       <FilmDetailModal
         show={showModal}
+        modalShow={showModal}
         selectedFilm={selected}
         onHide={() => setShowModal(false)}
       />
