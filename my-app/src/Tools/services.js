@@ -45,6 +45,11 @@ export const signupService = async (data) =>
   new Promise((resolve, reject) => {
     axios.post(API.getRatingCounts, data).then(resolve).catch(reject);
   })
+
+  export const searchFromWatchWishListService = async (data) => 
+  new Promise((resolve, reject) => {
+    axios.post(API.searchFromWatchWishList, data).then(resolve).catch(reject);
+  })
   
   export const createCommentService = async (data) => 
   new Promise((resolve, reject) => {
