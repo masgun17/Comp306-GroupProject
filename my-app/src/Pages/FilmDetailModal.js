@@ -8,16 +8,19 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
   const [commentArr, setCommentArr] = useState([]);
 
   useEffect(() => {
-    setSelected(selectedFilm);
-    // var jsonData = {
-    //   data: [
-    //     {
-    //       id: selectedFilm.id
-    //     },
-    //   ],
-    // };
-    // const resultComment = await getCommentsAction(jsonData);
-    // setCommentArr(resultComment);
+    if (selectedFilm) {
+      setSelected(selectedFilm);
+      var jsonData = {
+        data: [
+          {
+            Sid: selectedFilm.id
+          },
+        ],
+      };
+      const resultComment = getCommentsAction(jsonData);
+      setCommentArr(resultComment);
+    }
+    
   }, [selectedFilm]);
 
   return (
@@ -36,31 +39,31 @@ export default function FilmDetailModal({ selectedFilm, onHide, ...props }) {
             <div className="modal-title">
               <div className="alignCenter">
                 <h1>
-                  <strong>{selectedFilm.title}</strong>
+                  <strong>{selected.title}</strong>
                 </h1>
-                <h4>{selectedFilm.director}</h4>
-                <h5>{selectedFilm.actor}</h5>
+                <h4>{selected.director}</h4>
+                <h5>{selected.actor}</h5>
               </div>
             </div>
 
             <Modal.Body>
-              <div className="modal-body">{selectedFilm.description}</div>
+              <div className="modal-body">{selected.description}</div>
 
               <div className="modal-footer">
                 <div className="FilmInfo">
-                  <strong>Type: </strong> {selectedFilm.type}
+                  <strong>Type: </strong> {selected.type}
                   <br />
-                  <strong>Duration: </strong> {selectedFilm.duration}
+                  <strong>Duration: </strong> {selected.duration}
                   <br />
-                  <strong>Year: </strong> {selectedFilm.year}
+                  <strong>Year: </strong> {selected.year}
                   <br />
-                  <strong>Genre: </strong> {selectedFilm.genre}
+                  <strong>Genre: </strong> {selected.genre}
                   <br />
-                  <strong>Country: </strong> {selectedFilm.country}
+                  <strong>Country: </strong> {selected.country}
                   <br />
-                  <strong>Platform: </strong> {selectedFilm.platform}
+                  <strong>Platform: </strong> {selected.platform}
                   <br />
-                  <strong>Rating: </strong> {selectedFilm.rating}
+                  <strong>Rating: </strong> {selected.rating}
                   <br />
                 </div>
                 <div className="CommentSection" style={{overflowY: 'visible'}}>

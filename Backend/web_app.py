@@ -306,8 +306,9 @@ def getRatingCounts():
                 line = dict()
                 line["rating"] = item[0]
                 line["rating_count"] = item[1]
+                data.append(line)
         print(query)
-        data.append(line)
+        
         print(data)
     except Exception as e:
         print(e)
@@ -338,8 +339,9 @@ def getComments():
                 line["Username"] = item[0]
                 line["Comment"] = item[1]
                 line["Rating"] = item[2]
+                data.append(line)
         print(query)
-        data.append(line)
+        
         print(data)
     except Exception as e:
         print(e)
