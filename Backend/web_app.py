@@ -512,7 +512,7 @@ def createComment():
     Rating = form['Rating']  # int
 
     try:
-        result_code = Comment.add_item([Uid, Sid, Comment, Rating])
+        result_code = Comments.add_item([Uid, Sid, Comment, Rating])
         if result_code:
             return 'Comment added Successfully'
         else:

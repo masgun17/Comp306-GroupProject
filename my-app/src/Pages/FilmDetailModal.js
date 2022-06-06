@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import "../Styles/FilmDetailModal.css";
-import { getCommentsAction, getRatingCountsAction } from "../Tools/actions";
+import { getCommentsAction, getRatingCountsAction, createCommentAction } from "../Tools/actions";
 
 export default function FilmDetailModal({
   selectedFilm,
@@ -14,47 +14,70 @@ export default function FilmDetailModal({
   const [smallRating, setSmallRating] = useState(0);
   const [bigRating, setBigRating] = useState(5);
   const [ratingCounts, setRatingCounts] = useState("");
+  const [enteredComment, setEnteredComment] = useState("");
+  const [enteredRating, setEnteredRating] = useState();
+  const [warningMessage, setWarningMessage] = useState("");
+  const [userAlreadyCommented, setUserAlreadyCommented] = useState(true);
+
+
+  let userLogged = sessionStorage.getItem('isLogin');
+  let uid = sessionStorage.getItem('uid');
 
   useEffect(() => {
     setSelected(selectedFilm);
   }, [selectedFilm]);
 
+  useEffect( () => {
+    if (commentArr !== []) {
+      commentArr.forEach(element => {
+        console.log(element);
+      });
+    }
+  }, [commentArr])
+
+  const fetchCommentsAndRatingCounts = async () => {
+    setTimeout(() => {
+      var jsonData = {
+        data: [
+          {
+            Sid: selectedFilm.id,
+            rating_small: smallRating,
+            rating_big: bigRating,
+          },
+        ],
+      };
+      const resultComment = getCommentsAction(jsonData).then((onResolved) => {
+        setCommentArr(onResolved);
+      });
+    }, 100);
+
+    setTimeout(() => {
+      var jsonData = {
+        data: [
+          {
+            Sid: selectedFilm.id,
+          },
+        ],
+      };
+      var ratingCountArr = ["", "", "", "", ""];
+      const result = getRatingCountsAction(jsonData).then((onResolved) => {
+        // console.log(onResolved);
+        onResolved.forEach((element) => {
+          ratingCountArr[element.rating - 1] = element.rating_count;
+        });
+        setRatingCounts(ratingCountArr);
+        // console.log(ratingCountArr);
+      });
+    }, 200);
+  }
+
   useEffect(() => {
     if (selectedFilm) {
-      setTimeout(() => {
-        var jsonData = {
-          data: [
-            {
-              Sid: selectedFilm.id,
-              rating_small: smallRating,
-              rating_big: bigRating,
-            },
-          ],
-        };
-        const resultComment = getCommentsAction(jsonData).then((onResolved) => {
-          setCommentArr(onResolved);
-        });
-      }, 100);
-
-      setTimeout(() => {
-        var jsonData = {
-          data: [
-            {
-              Sid: selectedFilm.id,
-            },
-          ],
-        };
-        var ratingCountArr = ["", "", "", "", ""];
-        const result = getRatingCountsAction(jsonData).then((onResolved) => {
-          console.log(onResolved);
-          onResolved.forEach((element) => {
-            ratingCountArr[element.rating - 1] = element.rating_count;
-          });
-          setRatingCounts(ratingCountArr);
-          console.log(ratingCountArr);
-        });
-      }, 200);
+      fetchCommentsAndRatingCounts();
     }
+    setEnteredComment("");
+    setEnteredRating();
+    setWarningMessage("");
   }, [modalShow]);
 
   const filterComments = async (index) => {
@@ -85,6 +108,36 @@ export default function FilmDetailModal({
     const resultComment = getCommentsAction(jsonData).then((onResolved) => {
       setCommentArr(onResolved);
     });
+  }
+
+  
+
+  const createComment = async () => {
+
+    if (enteredRating < 1 || enteredRating > 5) {
+      setWarningMessage("Enter a valid rating!");
+    } else {
+      var jsonData = {
+        data: [
+          {
+            Sid: selectedFilm.id,
+            Uid: parseInt(uid),
+            Comment: enteredComment,
+            Rating: parseInt(enteredRating),
+          },
+        ],
+      };
+      const result = createCommentAction(jsonData).then((onResolved) => {
+        if (onResolved === 'Bad Request ') {
+          setWarningMessage("You have already commented!");
+        } else if (onResolved === 'Comment added Successfully') {
+          setWarningMessage("");
+          fetchCommentsAndRatingCounts();
+        }
+      });
+    }
+
+    
   }
 
   return (
@@ -151,6 +204,19 @@ export default function FilmDetailModal({
                   // style={{ overflowY: "visible" }}
                 >
                   <h5>Comments</h5>
+                  {userLogged && 
+                    <div className="CreateCommentWrapper">
+                      {/* <label> */}
+                        <input type="text" placeholder="Enter your comment" style={{height: "100px", marginBottom: "5px"}} value={enteredComment} onChange={e => setEnteredComment(e.target.value)} />
+                        <input type="number" placeholder="Enter your rating between 0-5" min={0} max={5} value={enteredRating} onChange={e => setEnteredRating(e.target.value)} />
+                      {/* </label>  */}
+                        <div className="AddCommentButton" type='button' onClick={createComment} >Add Comment</div>
+                        {warningMessage !== "" && <div>{warningMessage}</div>}
+                      <div>
+                        
+                      </div>
+                    </div>}
+
                   {commentArr &&
                     commentArr.map((element, index) => (
                       <div className="IndividualComment">
