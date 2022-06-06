@@ -17,11 +17,12 @@ export default function FilmDetailModal({
   const [enteredComment, setEnteredComment] = useState("");
   const [enteredRating, setEnteredRating] = useState();
   const [warningMessage, setWarningMessage] = useState("");
-  const [userAlreadyCommented, setUserAlreadyCommented] = useState(true);
+  const [userAlreadyCommented, setUserAlreadyCommented] = useState(false);
 
 
   let userLogged = sessionStorage.getItem('isLogin');
   let uid = sessionStorage.getItem('uid');
+  let sessionUserName = sessionStorage.getItem('username');
 
   useEffect(() => {
     setSelected(selectedFilm);
@@ -30,7 +31,9 @@ export default function FilmDetailModal({
   useEffect( () => {
     if (commentArr !== []) {
       commentArr.forEach(element => {
-        console.log(element);
+        if (element.Username === sessionUserName ) {
+          setUserAlreadyCommented(true);
+        }
       });
     }
   }, [commentArr])
@@ -78,6 +81,7 @@ export default function FilmDetailModal({
     setEnteredComment("");
     setEnteredRating();
     setWarningMessage("");
+    setUserAlreadyCommented(false);
   }, [modalShow]);
 
   const filterComments = async (index) => {
@@ -204,7 +208,7 @@ export default function FilmDetailModal({
                   // style={{ overflowY: "visible" }}
                 >
                   <h5>Comments</h5>
-                  {userLogged && 
+                  {userLogged && !userAlreadyCommented &&
                     <div className="CreateCommentWrapper">
                       {/* <label> */}
                         <input type="text" placeholder="Enter your comment" style={{height: "100px", marginBottom: "5px"}} value={enteredComment} onChange={e => setEnteredComment(e.target.value)} />
