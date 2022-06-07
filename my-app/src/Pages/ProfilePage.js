@@ -517,7 +517,7 @@ const ProfilePage = () => {
 
             <label
               htmlFor="actor"
-              style={{ "font-size": 20, "margin-left": "10px" }}
+              style={{ "font-size": 20}}
             >
               Actor:{" "}
             </label>
@@ -534,7 +534,7 @@ const ProfilePage = () => {
 
             <label
               htmlFor="director"
-              style={{ "font-size": 20, "margin-left": "10px" }}
+              style={{ "font-size": 20}}
             >
               Director:{" "}
             </label>
@@ -572,7 +572,7 @@ const ProfilePage = () => {
             />
             <label
               htmlFor="releaseYearTo"
-              style={{ "font-size": 20, "margin-left": "10px" }}
+              style={{ "font-size": 20}}
             >
               To:{" "}
             </label>
@@ -796,7 +796,7 @@ const ProfilePage = () => {
             watchedListInfo.map((element, index) => (
               <div className="FilmDivWrapper2">
                 <div
-                  className="FilmDiv"
+                  className="FilmDiv2"
                   onClick={() => {
                     setSelected(element);
                     setShowModalFilm(true);
@@ -890,7 +890,7 @@ const ProfilePage = () => {
               wishlistInfo.map((element, index) => (
                 <div className="FilmDivWrapper2">
                   <div
-                    className="FilmDiv"
+                    className="FilmDiv2"
                     onClick={() => {
                       setSelected(element);
                       setShowModalFilm(true);
