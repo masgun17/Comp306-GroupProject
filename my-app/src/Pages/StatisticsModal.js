@@ -32,13 +32,19 @@ export default function StatisticsModal({ modalShow, onHide, ...props }) {
         centered
         onHide={onHide}
       >
-        {genreList && genreList.map((element, index) => (
-            <div>
-                Genre: {element.Listed_In} <br/>
-                Total Movie Time: {element.MovieSum}<br/>
-                Total TV Season: {element.TVSum}<br/><hr />
-            </div>
-        ))}
+        <div style={{ overflowY: "auto" }}>
+          {genreList &&
+            genreList.map((element, index) => (
+              <div>
+                Genre: {element.Listed_In} <br />
+                Total Movie Time: {element.MovieSum}
+                <br />
+                Total TV Season: {element.TVSum}
+                <br />
+                <hr />
+              </div>
+            ))}
+        </div>
       </Modal>
     </div>
   );
